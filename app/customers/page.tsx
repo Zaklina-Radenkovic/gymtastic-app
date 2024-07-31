@@ -1,7 +1,12 @@
 export const metadata = {
-  title: "Customers",
+  title: 'Customers',
 };
 
 export default function Page() {
-  return <h1>Customers</h1>;
+  return (
+    <div className="flex items-center justify-between">
+      <h1>Customers</h1>
+      <button>Add</button>
+    </div>
+  );
 }

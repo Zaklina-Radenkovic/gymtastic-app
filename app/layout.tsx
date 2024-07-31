@@ -1,7 +1,7 @@
 import Header from './_components/Header';
-
-import '@/app/_styles/globals.css';
 import SideNavigation from './_components/SideNavigation';
+import { Inter } from 'next/font/google';
+import '@/app/_styles/globals.css';
 
 export const metadata = {
   title: {
@@ -11,6 +11,11 @@ export const metadata = {
   description: 'Sports scheduling app',
 };
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -18,19 +23,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* <body className="bg-primary-50 text-primary-950 flex min-h-screen flex-col">
+      <body
+        className={`${inter.className} text-primary-800 grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] antialiased`}
+      >
         <Header />
-        <div className="grid h-full flex-1 grid-cols-[16rem_1fr] gap-12">
-          <SideNavigation />
-          <main className="py-1">{children}</main>
-        </div>
-      </body> */}
-      <body className="bg-primary-50 text-primary-950 flex min-h-screen">
         <SideNavigation />
-        <div className="h-full flex-1">
-          <Header />
-          <main className="py-1">{children}</main>
-        </div>
+
+        <main className="bg-primary-200 px-20 pb-24 pt-16">
+          <div className="mx-auto my-0 flex flex-col gap-12">{children}</div>
+        </main>
       </body>
     </html>
   );

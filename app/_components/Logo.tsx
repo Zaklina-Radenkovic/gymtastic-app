@@ -4,20 +4,16 @@ import Link from 'next/link';
 
 function Logo() {
   return (
-    <div className="border-primary-100 border-b px-5 py-10">
-      <Link href="/" className="z-10 flex items-center gap-4">
-        <Image
-          src={logo}
-          alt="Gymtastic Logo"
-          height="40"
-          quality={100}
-          width="40"
-        />
-        <span className="text-primary-100 text-xl font-semibold">
-          Gymtastic App
-        </span>
-      </Link>
-    </div>
+    <Link href="/" className="z-10 flex flex-col items-center gap-4">
+      <Image
+        src={logo}
+        alt="Gymtastic Logo"
+        height="60"
+        quality={100}
+        width="60"
+      />
+      <span className="text-primary-50 text-lg font-bold">Gymtastic App</span>
+    </Link>
   );
 }
 
