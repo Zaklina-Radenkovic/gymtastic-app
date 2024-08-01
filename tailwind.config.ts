@@ -67,6 +67,17 @@ const config: Config = {
         //   950: '#3C200C',
         // },
       },
+      borderRadius: {
+        tiny: '3px',
+        sm: '5px',
+        md: '7px',
+        lg: '9px',
+      },
+      boxShadow: {
+        sm: '0 1px 2px rgba(0, 0, 0, 0.4)',
+        md: '0px 0.6rem 2.4rem rgba(0, 0, 0, 0.3)',
+        lg: '0 2.4rem 3.2rem rgba(0, 0, 0, 0.4)',
+      },
     },
   },
   plugins: [],
