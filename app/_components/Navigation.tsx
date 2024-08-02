@@ -21,7 +21,7 @@ function Navigation() {
   };
 
   return (
-    <nav className="flex items-center justify-between gap-10 text-lg">
+    <nav className="flex items-center justify-between gap-10">
       <User user={user} />
       <ul className="flex gap-2">
         <li>

@@ -1,5 +1,7 @@
 import InputSearch from '../_components/InputSearch';
+import Table from '../_components/Table';
 import SortBy from '../_components/SortBy';
+import CustomersList from '../_components/CustomersList';
 
 export const metadata = {
   title: 'Customers',
@@ -13,10 +15,7 @@ export default function Page() {
         <button>Add</button>
       </div>
 
-      <div className="flex flex-wrap items-center p-6">
-        <InputSearch />
-        <SortBy />
-      </div>
+      <CustomersList />
     </>
   );
 }
