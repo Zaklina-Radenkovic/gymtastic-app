@@ -24,12 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} text-primary-800 grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] antialiased`}
+        className={`${inter.className} grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] text-primary-800 antialiased`}
       >
         <Header />
         <SideNavigation />
 
-        <main className="bg-primary-200 px-20 pb-24 pt-16">
+        <main className="bg-primary-100 px-20 pb-24 pt-16">
           <div className="mx-auto my-0 flex flex-col gap-12">{children}</div>
         </main>
       </body>

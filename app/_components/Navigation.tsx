@@ -14,12 +14,12 @@ type User = {
   };
 };
 
-function Navigation() {
-  const user = {
-    name: 'Jackie',
-    image: '',
-  };
+const user = {
+  name: 'Jackie',
+  image: '',
+};
 
+function Navigation() {
   return (
     <nav className="flex items-center justify-between gap-10">
       <User user={user} />
@@ -47,6 +47,7 @@ function User({ user: { name, image } }: User) {
         src={image || '/default-user.jpg'}
         alt={`Avatar of ${name}`}
         referrerPolicy="no-referrer"
+        className="rounded-full"
       />
       <span>{name}</span>
     </Link>
