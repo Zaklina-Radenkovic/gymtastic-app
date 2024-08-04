@@ -25,11 +25,17 @@ function Table({ columns, children }: TableContextProps) {
   );
 }
 
-function Header({ children }: { children: React.ReactNode }) {
+function Header({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className: String;
+}) {
   const { columns }: any = useContext(TableContext);
   return (
     <div
-      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 bg-primary-100 px-6 py-4 font-semibold uppercase tracking-[.4rem] text-primary-700 ${columns}`}
+      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 bg-primary-100 px-6 py-4 font-semibold uppercase tracking-[.4rem] text-primary-700 ${columns} ${className}`}
     >
       {children}
     </div>

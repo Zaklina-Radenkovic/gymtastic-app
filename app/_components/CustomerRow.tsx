@@ -28,10 +28,10 @@ function CustomerRow({ customerId }: any) {
       <div className="font-medium">3.000,00</div>
 
       <div className="flex items-center gap-4 text-primary-600">
-        <Link href={`/customers/${id}`}>
+        <Link href="">
           <PencilSquareIcon className="h-6 w-6" />
         </Link>
-        <Link href="">
+        <Link href={`/customers/${id}`}>
           <EyeIcon className="h-6 w-6" />
         </Link>
       </div>

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowLongLeftIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
 
+import CustomerDetails from '@/app/_components/CustomerDetails';
+
 const user = {
   name: 'Jackie',
   image: '',
@@ -43,6 +45,8 @@ export default function Page() {
           <PencilSquareIcon className="ml-2 h-4 w-4" />
         </Link>
       </div>
+
+      <CustomerDetails />
     </>
   );
 }
