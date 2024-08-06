@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/16/solid';
 import defaultUser from '@/public/default-user.jpg';
 import Image from 'next/image';
+import ButtonIcon from './ButtonIcon';
 
 type User = {
   user: {
@@ -25,13 +26,19 @@ function Navigation() {
       <User user={user} />
       <ul className="flex gap-2">
         <li>
-          <UserIcon className="h-6 w-6 text-indigo-600" />
+          <ButtonIcon>
+            <UserIcon className="h-6 w-6 text-indigo-600" />
+          </ButtonIcon>
         </li>
         <li>
-          <SunIcon className="h-6 w-6 text-indigo-600" />
+          <ButtonIcon>
+            <SunIcon className="h-6 w-6 text-indigo-600" />
+          </ButtonIcon>
         </li>
         <li>
-          <ArrowRightStartOnRectangleIcon className="h-6 w-6 text-indigo-600" />
+          <ButtonIcon>
+            <ArrowRightStartOnRectangleIcon className="h-6 w-6 text-indigo-600" />
+          </ButtonIcon>
         </li>
       </ul>
     </nav>
