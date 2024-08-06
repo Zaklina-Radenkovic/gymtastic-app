@@ -1,16 +1,9 @@
 'use client';
 import { Children, createContext, useContext } from 'react';
 
-type PolymorphicProps<E extends React.ElementType> = React.PropsWithChildren<
-  React.ComponentPropsWithoutRef<E> & {
-    as?: E;
-  }
->;
-
 type TableContextProps = {
   children: React.ReactNode;
   columns: String;
-  // as?: React.ReactNode | String;
 };
 
 const TableContext = createContext({});
@@ -28,9 +21,11 @@ function Table({ columns, children }: TableContextProps) {
 function Header({
   children,
   className,
+  as,
 }: {
   children: React.ReactNode;
-  className: String;
+  className?: String;
+  as: JSX.IntrinsicElements | React.ComponentType<any> | String;
 }) {
   const { columns }: any = useContext(TableContext);
   return (

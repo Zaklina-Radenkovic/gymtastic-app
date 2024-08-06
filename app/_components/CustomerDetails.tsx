@@ -1,5 +1,6 @@
 'use client';
 import Table from './Table';
+import Tag from './Tag';
 
 const CustomerDetails = () => {
   return (
@@ -20,7 +21,7 @@ const CustomerDetails = () => {
       <div className="flex flex-col gap-4">
         <h3 className="text-lg font-medium leading-snug">Subscription</h3>
         <Table columns="grid-cols-[10rem_8rem_1fr_1fr]">
-          <Table.Header className="tracking-normal">
+          <Table.Header className="tracking-normal" as="header">
             <div>Period</div>
             <div>Trainings</div>
             <div>Product</div>
@@ -32,17 +33,17 @@ const CustomerDetails = () => {
               <span className="text-xs">10 May 2024 - 13 May 2024</span>
               <span>10/12</span>
               <span>1 month 12 trainings</span>
-              <span className="rounded-[100px] font-semibold uppercase">
-                Paid
-              </span>
+              <Tag color="text-red-100" background="bg-red-700">
+                Unpaid
+              </Tag>
             </Table.Row>
             <Table.Row>
               <span className="text-xs">10 May 2024 - 13 May 2024</span>
               <span>10/12</span>
               <span>1 month 12 trainings</span>
-              <span className="rounded-[100px] font-semibold uppercase">
+              <Tag color="text-green-100" background="bg-green-700">
                 Paid
-              </span>
+              </Tag>
             </Table.Row>
             <Table.Row>
               <button className="col-start-4">Add Subscription</button>
