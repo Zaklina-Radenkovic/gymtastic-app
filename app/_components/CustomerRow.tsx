@@ -1,6 +1,7 @@
 import { PencilSquareIcon, EyeIcon } from '@heroicons/react/16/solid';
 import Table from './Table';
 import Link from 'next/link';
+import Tag from './Tag';
 
 type Customer = {
   name: String;
@@ -23,12 +24,14 @@ function CustomerRow({ customerId }: any) {
         <span className="font-medium">{name}</span>
         <span className="text-xs text-primary-600">{email}</span>
       </div>
+      <Tag color="text-green-100" background="bg-green-700">
+        Paid
+      </Tag>
 
-      <span className="rounded-[100px] font-semibold uppercase">Paid</span>
       <div className="font-medium">3.000,00</div>
 
       <div className="flex items-center gap-4 text-primary-600">
-        <Link href="">
+        <Link href={`/customers/${id}/edit`}>
           <PencilSquareIcon className="h-6 w-6" />
         </Link>
         <Link href={`/customers/${id}`}>

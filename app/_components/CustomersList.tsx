@@ -9,17 +9,17 @@ import Pagination from './Pagination';
 function CustomersList() {
   return (
     <>
-      <div className="flex flex-wrap items-center p-6">
+      <div className="pe flex flex-wrap items-center gap-10 pr-5">
         <InputSearch />
         <SortBy />
       </div>
 
-      <Table columns="grid-cols-[2fr_1.4fr_1fr_1fr]">
+      <Table columns="grid-cols-[14rem_1fr_1.2fr_1fr]">
         <Table.Header as="header">
           <div>Name</div>
           <div>Status</div>
           <div>Amount</div>
-          <div>Action</div>
+          <div>Actions</div>
         </Table.Header>
 
         <Table.Body>

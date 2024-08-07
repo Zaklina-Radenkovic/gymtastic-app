@@ -9,7 +9,7 @@ function Tag({
 }) {
   return (
     <span
-      className={`max-w-fit rounded-full px-3 py-1 text-sm font-semibold uppercase ${color} ${background}`}
+      className={`max-w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase ${color} ${background}`}
     >
       {children}
     </span>

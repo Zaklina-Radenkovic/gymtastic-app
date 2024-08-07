@@ -4,7 +4,7 @@ import Input from './Input';
 
 function UpdatePasswordForm() {
   return (
-    <form className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-14 py-9 text-sm">
+    <form className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm">
       <FormRow
         label="New password (min 8 chars)"
         // error={errors?.password?.message}

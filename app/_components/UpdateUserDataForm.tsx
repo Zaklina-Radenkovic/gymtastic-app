@@ -4,7 +4,7 @@ import Input from './Input';
 
 function UpdateCustomerData({ email }: any) {
   return (
-    <form className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-14 py-9 text-sm">
+    <form className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm">
       <FormRow label="Email address">
         <Input value={email} disabled type="text" />
       </FormRow>

@@ -1,4 +1,5 @@
 'use client';
+import Button from './Button';
 import Table from './Table';
 import Tag from './Tag';
 
@@ -46,7 +47,7 @@ const CustomerDetails = () => {
               </Tag>
             </Table.Row>
             <Table.Row>
-              <button className="col-start-4">Add Subscription</button>
+              <Button>Add Subscription</Button>
             </Table.Row>
           </Table.Body>
         </Table>

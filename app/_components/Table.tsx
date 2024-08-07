@@ -30,7 +30,7 @@ function Header({
   const { columns }: any = useContext(TableContext);
   return (
     <div
-      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 bg-primary-100 px-6 py-4 font-semibold uppercase tracking-[.4rem] text-primary-700 ${columns} ${className}`}
+      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 bg-primary-100 px-6 py-4 font-semibold uppercase tracking-[.1rem] text-primary-700 ${columns} ${className}`}
     >
       {children}
     </div>
@@ -42,7 +42,7 @@ function Row({ children }: { children: React.ReactNode }) {
   return (
     <div
       role="row"
-      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 px-6 py-3 ${columns} last:border-b-0`}
+      className={`grid items-center gap-x-8 border-b-[1px] border-primary-200 px-6 py-3 ${columns} *:ml-2 last:border-b-0 has-[button]:flex has-[button]:justify-end has-[button]:pb-2`}
     >
       {children}
     </div>

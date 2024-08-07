@@ -11,11 +11,16 @@ const variations = {
   danger: 'text-red-100 bg-red-700 hover:bg-red-800',
 };
 
-function Button({ size = 'medium', variation = 'primary', children }: any) {
+function Button({
+  size = 'medium',
+  variation = 'primary',
+  children,
+  className,
+}: any) {
   return (
     <button
       //@ts-ignore
-      className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]}`}
+      className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className}`}
     >
       {children}
     </button>
