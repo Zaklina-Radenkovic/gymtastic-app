@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { ArrowLongLeftIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
+import { ArrowLongLeftIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
 
 import CustomerDetails from '@/app/_components/CustomerDetails';
-`import Button from '@/app/_components/Button';
 
 const user = {
   name: 'Jackie',
