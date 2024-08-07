@@ -74,9 +74,9 @@ const config: Config = {
         lg: '9px',
       },
       boxShadow: {
-        sm: '0 1px 2px rgba(0, 0, 0, 0.4)',
-        md: '0px 0.6rem 2.4rem rgba(0, 0, 0, 0.3)',
-        lg: '0 2.4rem 3.2rem rgba(0, 0, 0, 0.4)',
+        sm: '0 1px 2px rgba(0, 0, 0, 0.04)',
+        md: '0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06)',
+        lg: '0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)',
       },
     },
   },
