@@ -11,8 +11,9 @@ function Logo() {
         height="60"
         quality={100}
         width="60"
+        priority
       />
-      <span className="text-primary-50 text-lg font-bold">Gymtastic App</span>
+      <span className="text-lg font-bold text-primary-50">Gymtastic App</span>
     </Link>
   );
 }

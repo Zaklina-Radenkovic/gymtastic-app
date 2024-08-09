@@ -29,7 +29,7 @@ export default function RootLayout({
         <Header />
         <SideNavigation />
 
-        <main className="bg-primary-100 px-20 pb-24 pt-16">
+        <main className="bg-primary-100 px-12 pb-16 pt-10">
           <div className="mx-auto my-0 flex flex-col gap-12">{children}</div>
         </main>
       </body>
