@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import { PencilSquareIcon, EyeIcon } from '@heroicons/react/16/solid';
 import Table from './Table';
-import Link from 'next/link';
 import Tag from './Tag';
 
 type Customer = {
@@ -9,14 +9,8 @@ type Customer = {
   customerId: String;
 };
 
-const customer = {
-  name: 'Jackie Radenkovic',
-  email: 'test@test.org',
-  id: '123',
-};
-
-function CustomerRow({ customerId }: any) {
-  const { name, email, id } = customer;
+function CustomerRow({ customer }: any) {
+  const { name, email, status, id = '123' } = customer;
 
   return (
     <Table.Row>

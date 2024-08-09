@@ -55,8 +55,8 @@ function Row({ children }: { children: React.ReactNode }) {
 //   return <StyledBody>{data.map(render)}</StyledBody>;
 // }
 
-function Body({ children }: { children: React.ReactNode }) {
-  return <section className="mx-0 my-2">{children}</section>;
+function Body({ data, render }: any) {
+  return <section className="mx-0 my-2">{data.map(render)}</section>;
 }
 
 function Footer({ children }: { children: React.ReactNode }) {
