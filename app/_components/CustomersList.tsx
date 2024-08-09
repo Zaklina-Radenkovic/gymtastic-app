@@ -1,11 +1,12 @@
 import InputSearch from './InputSearch';
 import SortBy from './SortBy';
+import CustomerTable from './CustomerTable';
 
 import { getUsers } from '../_lib/data-service';
-import CustomerTable from './CustomerTable';
 
 async function CustomersList() {
   const users = await getUsers();
+  if (!users.length) return null;
   const serializeUsers = JSON.stringify(users);
 
   return (
@@ -15,7 +16,7 @@ async function CustomersList() {
         <SortBy />
       </div>
 
-      <CustomerTable users={serializeUsers} />
+      <CustomerTable serializeUsers={serializeUsers} />
     </>
   );
 }

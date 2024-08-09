@@ -3,19 +3,25 @@ import Table from './Table';
 import CustomerRow from './CustomerRow';
 import Pagination from './Pagination';
 
-const CustomerTable = ({ users }: any) => {
+const CustomerTable = ({ serializeUsers }: any) => {
+  const users = JSON.parse(serializeUsers);
+
   return (
-    <Table columns="grid-cols-[14rem_1fr_1.2fr_1fr]">
+    <Table columns="grid-cols-[2rem_1.8fr_0.6fr_0.6fr_1.4fr_1.4fr_1fr_3.2rem]">
       <Table.Header as="header">
+        <div></div>
         <div>Name</div>
+        <div>Role</div>
         <div>Status</div>
-        <div>Amount</div>
-        <div>Actions</div>
+        <div>Member since</div>
+        <div>Expiration date</div>
+        <div>Trainings</div>
+        <div></div>
       </Table.Header>
 
       <Table.Body
-        data={JSON.parse(users)}
-        render={(user: any) => <CustomerRow key={user.name} customer={user} />}
+        data={users}
+        render={(user: any) => <CustomerRow key={user.id} customer={user} />}
       />
 
       <Table.Footer>

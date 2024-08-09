@@ -1,9 +1,9 @@
 'use client';
-import Button from './Button';
-import Table from './Table';
-import Tag from './Tag';
 
-const CustomerDetails = () => {
+import Subscription from './Subscription';
+import Table from './Table';
+
+const CustomerDetails = ({ customer }: any) => {
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -11,7 +11,7 @@ const CustomerDetails = () => {
         <Table columns="grid-cols-[14rem_1fr]">
           <Table.Row>
             <h6 className="text-sm font-medium">Email</h6>
-            <p className="text-primary-600">test@test.org</p>
+            <p className="text-primary-600">{customer.email}</p>
           </Table.Row>
           <Table.Row>
             <h6 className="text-sm font-medium">Phone</h6>
@@ -29,27 +29,9 @@ const CustomerDetails = () => {
             <div>Payment status</div>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <span className="text-xs">10 May 2024 - 13 May 2024</span>
-              <span>10/12</span>
-              <span>1 month 12 trainings</span>
-              <Tag color="text-red-100" background="bg-red-700">
-                Unpaid
-              </Tag>
-            </Table.Row>
-            <Table.Row>
-              <span className="text-xs">10 May 2024 - 13 May 2024</span>
-              <span>10/12</span>
-              <span>1 month 12 trainings</span>
-              <Tag color="text-green-100" background="bg-green-700">
-                Paid
-              </Tag>
-            </Table.Row>
-            <Table.Row>
-              <Button>Add Subscription</Button>
-            </Table.Row>
-          </Table.Body>
+          <div className="mx-0 my-2">
+            <Subscription />
+          </div>
         </Table>
       </div>
     </>

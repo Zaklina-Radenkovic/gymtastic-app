@@ -1,5 +1,6 @@
+import { deleteCache } from 'next/dist/server/lib/render-server';
 import { db } from '../_lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export const getUsers = async function () {
   const collectionRef = collection(db, 'users');
@@ -10,4 +11,12 @@ export const getUsers = async function () {
   }));
 
   return usersList;
+};
+
+export const getUser = async function (id: any) {
+  let user = null;
+  const docRef = doc(db, 'users', id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) return docSnap.data();
 };

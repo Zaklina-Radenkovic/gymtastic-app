@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLongLeftIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
-
 import CustomerDetails from '@/app/_components/CustomerDetails';
 
-const user = {
-  name: 'Jackie',
-  image: '',
-  id: '123',
-};
+import { getUser } from '@/app/_lib/data-service';
+import { DocumentData } from 'firebase/firestore';
 
-export default function Page() {
-  const { name, image, id } = user;
+type User = {
+  name: string;
+  email: string;
+  image?: string;
+  id: string;
+} | null;
+
+export default async function Page({ params: { customerId } }: any) {
+  const user: DocumentData | undefined = await getUser(customerId);
+  if (!user) return null;
+
+  const { name, image, id, email } = user;
   return (
     <>
       <div className="mb-4">
@@ -38,7 +44,7 @@ export default function Page() {
         </div>
 
         <Link
-          href={`/customers/${id}/edit`}
+          href={`/customers/${customerId}/edit`}
           className="flex items-center rounded-sm border border-indigo-500 bg-primary-100 px-5 py-3 text-sm font-medium text-indigo-500 hover:bg-primary-50"
         >
           <span>Edit</span>
@@ -46,7 +52,7 @@ export default function Page() {
         </Link>
       </div>
 
-      <CustomerDetails />
+      <CustomerDetails customer={user} />
     </>
   );
 }

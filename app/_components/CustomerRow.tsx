@@ -1,35 +1,52 @@
 import Link from 'next/link';
 import { PencilSquareIcon, EyeIcon } from '@heroicons/react/16/solid';
 import Table from './Table';
-import Tag from './Tag';
 
 type Customer = {
-  name: String;
-  email: String;
-  customerId: String;
+  customer: {
+    name: String;
+    email: String;
+    status: String;
+    id: String;
+    role: String;
+    memberSince: Date;
+    expirationDate: Date;
+    trainings: String;
+  };
 };
 
-function CustomerRow({ customer }: any) {
-  const { name, email, status, id = '123' } = customer;
+function CustomerRow({ customer }: Customer) {
+  console.log(customer);
+  const {
+    name,
+    email,
+    status,
+    id: customerId,
+    role,
+    memberSince,
+    expirationDate,
+    trainings,
+  } = customer;
 
   return (
     <Table.Row>
+      <div>p </div>
       <div className="flex flex-col gap-1">
         <span className="font-medium">{name}</span>
         <span className="text-xs text-primary-600">{email}</span>
       </div>
-      <Tag color="text-green-100" background="bg-green-700">
-        Paid
-      </Tag>
+      <div className="font-medium">{role}</div>
+      <div className="font-medium">{status}</div>
+      <div className="font-medium">07/08/2023</div>
+      <div className="font-medium">07-08-2024</div>
+      <div className="font-medium">{trainings}</div>
 
-      <div className="font-medium">3.000,00</div>
-
-      <div className="flex items-center gap-4 text-primary-600">
-        <Link href={`/customers/${id}/edit`}>
-          <PencilSquareIcon className="h-6 w-6" />
+      <div className="flex flex-col justify-center gap-2 text-primary-600">
+        <Link href={`/customers/${customerId}/edit`}>
+          <PencilSquareIcon className="h-5 w-5" />
         </Link>
-        <Link href={`/customers/${id}`}>
-          <EyeIcon className="h-6 w-6" />
+        <Link href={`/customers/${customerId}`}>
+          <EyeIcon className="h-5 w-5" />
         </Link>
       </div>
     </Table.Row>

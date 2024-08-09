@@ -3,15 +3,12 @@ import UpdateUserDataForm from '@/app/_components/UpdateUserDataForm';
 import { ArrowLongLeftIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
 import UpdatePasswordForm from '@/app/_components/UpdatePasswordForm';
+import { DocumentData } from 'firebase/firestore';
+import { getUser } from '@/app/_lib/data-service';
 
-const user = {
-  name: 'Jackie',
-  image: '',
-  id: '123',
-  email: 'test@test.org',
-};
-
-export default function Page() {
+export default async function Page({ params: { customerId } }: any) {
+  const user: DocumentData | undefined = await getUser(customerId);
+  if (!user) return null;
   const { name, image, id, email } = user;
   return (
     <>
