@@ -1,6 +1,8 @@
 import { PlusIcon } from '@heroicons/react/16/solid';
 import CustomersList from '../_components/CustomersList';
 import Button from '../_components/Button';
+import { Suspense } from 'react';
+import Spinner from '../_components/Spinner';
 
 export const metadata = {
   title: 'Customers',
@@ -16,7 +18,9 @@ export default function Page() {
         </Button>
       </div>
 
-      <CustomersList />
+      <Suspense fallback={<Spinner />}>
+        <CustomersList />
+      </Suspense>
     </>
   );
 }
