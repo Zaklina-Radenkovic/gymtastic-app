@@ -45,9 +45,7 @@ export default async function Page({ params: { customerId } }: any) {
       </div>
 
       <div className="flex flex-col gap-4">
-        <h3 className="text-lg font-medium leading-snug">
-          Update customer data
-        </h3>
+        <h3 className="text-lg font-medium leading-snug">Update password</h3>
         <UpdatePasswordForm />
       </div>
     </>

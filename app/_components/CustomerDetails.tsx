@@ -3,7 +3,7 @@
 import Subscription from './Subscription';
 import Table from './Table';
 
-const CustomerDetails = ({ customer }: any) => {
+const CustomerDetails = ({ email, phone }: any) => {
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -11,10 +11,11 @@ const CustomerDetails = ({ customer }: any) => {
         <Table columns="grid-cols-[14rem_1fr]">
           <Table.Row>
             <h6 className="text-sm font-medium">Email</h6>
-            <p className="text-primary-600">{customer.email}</p>
+            <p className="text-primary-600">{email}</p>
           </Table.Row>
           <Table.Row>
             <h6 className="text-sm font-medium">Phone</h6>
+            <p className="text-primary-600">{phone}</p>
           </Table.Row>
         </Table>
       </div>

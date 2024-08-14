@@ -6,10 +6,15 @@ import CustomerDetails from '@/app/_components/CustomerDetails';
 import { getUser } from '@/app/_lib/data-service';
 import { DocumentData } from 'firebase/firestore';
 
+export const metadata = {
+  title: 'Customers',
+};
+
 type User = {
   name: string;
   email: string;
   image?: string;
+  phone?: number;
   id: string;
 } | null;
 
@@ -17,7 +22,7 @@ export default async function Page({ params: { customerId } }: any) {
   const user: DocumentData | undefined = await getUser(customerId);
   if (!user) return null;
 
-  const { name, image, id, email } = user;
+  const { name, image, email, phone } = user;
   return (
     <>
       <div className="mb-4">
@@ -52,7 +57,7 @@ export default async function Page({ params: { customerId } }: any) {
         </Link>
       </div>
 
-      <CustomerDetails customer={user} />
+      <CustomerDetails email={email} phone={phone} />
     </>
   );
 }
