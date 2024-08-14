@@ -1,6 +1,7 @@
-import { deleteCache } from 'next/dist/server/lib/render-server';
 import { db } from '../_lib/firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { error } from 'console';
+import { notFound } from 'next/navigation';
 
 export const getUsers = async function () {
   const collectionRef = collection(db, 'users');
@@ -10,13 +11,21 @@ export const getUsers = async function () {
     id: doc.id,
   }));
 
+  // if (error) {
+  //   console.error(error);
+  //   throw new Error('Customers could not be loaded');
+  // }
   return usersList;
 };
 
 export const getUser = async function (id: any) {
-  let user = null;
   const docRef = doc(db, 'users', id);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) return docSnap.data();
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
 };
