@@ -20,6 +20,7 @@ type User = {
 
 export default async function Page({ params: { customerId } }: any) {
   const user: DocumentData | undefined = await getUser(customerId);
+
   if (!user) return null;
 
   const { name, image, email, phone } = user;

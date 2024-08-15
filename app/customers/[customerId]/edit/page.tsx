@@ -6,10 +6,15 @@ import UpdatePasswordForm from '@/app/_components/UpdatePasswordForm';
 import { DocumentData } from 'firebase/firestore';
 import { getUser } from '@/app/_lib/data-service';
 
+export const metadata = {
+  title: 'Update profile',
+};
+
 export default async function Page({ params: { customerId } }: any) {
   const user: DocumentData | undefined = await getUser(customerId);
+
   if (!user) return null;
-  const { name, image, id, email } = user;
+  const { name, image, email } = user;
   return (
     <>
       <div className="mb-4">
@@ -41,7 +46,7 @@ export default async function Page({ params: { customerId } }: any) {
         <h3 className="text-lg font-medium leading-snug">
           Update customer data
         </h3>
-        <UpdateUserDataForm email={email} />
+        <UpdateUserDataForm user={user} id={customerId} />
       </div>
 
       <div className="flex flex-col gap-4">

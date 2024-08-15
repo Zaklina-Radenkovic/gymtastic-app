@@ -4,7 +4,7 @@ function NotFound() {
   return (
     <main className="mt-4 space-y-6 text-center">
       <h1 className="text-2xl font-semibold">
-        This customer could not be found :(
+        Could not find the requested customer. :(
       </h1>
       <Link
         href="/customers"
