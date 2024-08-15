@@ -5,17 +5,17 @@ import { notFound } from 'next/navigation';
 
 export const getUsers = async function () {
   const collectionRef = collection(db, 'users');
-  const usersCollectionSnapshot = await getDocs(collectionRef);
-  const usersList = usersCollectionSnapshot.docs.map((doc) => ({
-    ...doc.data(),
-    id: doc.id,
-  }));
 
-  // if (error) {
-  //   console.error(error);
-  //   throw new Error('Customers could not be loaded');
-  // }
-  return usersList;
+  try {
+    const usersCollectionSnapshot = await getDocs(collectionRef);
+    const usersList = usersCollectionSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    return usersList;
+  } catch {
+    throw new Error('Customers could not be loaded');
+  }
 };
 
 export const getUser = async function (id: any) {
