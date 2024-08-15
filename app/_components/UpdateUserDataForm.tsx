@@ -2,6 +2,7 @@ import { updateCustomer } from '../_lib/actions';
 import Button from './Button';
 import FormRow from './FormRow';
 import Input from './Input';
+import SubmitButton from './SubmitButton';
 
 function UpdateCustomerData({ user, id }: any) {
   const { name, image, email } = user;
@@ -29,8 +30,8 @@ function UpdateCustomerData({ user, id }: any) {
         <Button type="reset" variation="secondary">
           Cancel
         </Button>
-        <Button pendingLabel="Updating...">Update account</Button>
-        <Button variation="danger">Delete</Button>
+        <SubmitButton pendingLabel="Updating...">Update account</SubmitButton>
+        {/* <Button variation="danger">Delete</Button> */}
       </FormRow>
     </form>
   );

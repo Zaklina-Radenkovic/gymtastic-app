@@ -1,7 +1,5 @@
 'use client';
 
-import { useFormStatus } from 'react-dom';
-
 const sizes = {
   small: 'text-xs py-1 px-3 uppercase font-semibold text-center',
   medium: 'text-sm py-3 px-4 font-medium',
@@ -19,7 +17,7 @@ function Button({
   size = 'medium',
   variation = 'primary',
   children,
-  pendingLabel,
+  disabled,
   className,
   type,
   ...otherProps
@@ -27,21 +25,18 @@ function Button({
   type?: 'button' | 'submit' | 'reset' | undefined;
   size?: string;
   variation?: string;
-  children: string;
-  pendingLabel?: string;
+  children: string | any;
+  disabled?: boolean;
   className?: string;
-}) {
-  const { pending } = useFormStatus();
-
+}): JSX.Element {
   return (
     <button
       //@ts-ignore
-      className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className}`}
+      className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className} disabled:cursor-not-allowed disabled:bg-primary-500 disabled:text-primary-300`}
       type={type}
-      disabled={pending}
       {...otherProps}
     >
-      {pending ? pendingLabel : children}
+      {children}
     </button>
   );
 }
