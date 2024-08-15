@@ -1,3 +1,7 @@
+'use client';
+
+import { useFormStatus } from 'react-dom';
+
 const sizes = {
   small: 'text-xs py-1 px-3 uppercase font-semibold text-center',
   medium: 'text-sm py-3 px-4 font-medium',
@@ -15,14 +19,29 @@ function Button({
   size = 'medium',
   variation = 'primary',
   children,
+  pendingLabel,
   className,
-}: any) {
+  type,
+  ...otherProps
+}: {
+  type?: 'button' | 'submit' | 'reset' | undefined;
+  size?: string;
+  variation?: string;
+  children: string;
+  pendingLabel?: string;
+  className?: string;
+}) {
+  const { pending } = useFormStatus();
+
   return (
     <button
       //@ts-ignore
       className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className}`}
+      type={type}
+      disabled={pending}
+      {...otherProps}
     >
-      {children}
+      {pending ? pendingLabel : children}
     </button>
   );
 }

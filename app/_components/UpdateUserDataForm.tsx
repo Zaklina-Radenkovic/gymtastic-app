@@ -1,16 +1,22 @@
+import { updateCustomer } from '../_lib/actions';
 import Button from './Button';
 import FormRow from './FormRow';
 import Input from './Input';
 
-function UpdateCustomerData({ email }: any) {
+function UpdateCustomerData({ user, id }: any) {
+  const { name, image, email } = user;
   return (
-    <form className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm">
-      <FormRow label="Email address">
-        <Input value={email} disabled type="text" />
-      </FormRow>
+    <form
+      className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
+      action={updateCustomer}
+    >
       <FormRow label="Full name">
-        <Input type="text" value="" id="" />
+        <Input defaultValue={name} name="name" type="text" />
       </FormRow>
+      <FormRow label="Email address">
+        <Input type="text" name="email" defaultValue={email} />
+      </FormRow>
+      <input hidden name="id" value={id} readOnly />
       <FormRow label="Avatar image">
         <Input
           type="file"
@@ -23,7 +29,7 @@ function UpdateCustomerData({ email }: any) {
         <Button type="reset" variation="secondary">
           Cancel
         </Button>
-        <Button>Update account</Button>
+        <Button pendingLabel="Updating...">Update account</Button>
         <Button variation="danger">Delete</Button>
       </FormRow>
     </form>

@@ -1,11 +1,10 @@
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
-  //   label: string | null;
   value?: string;
   disabled?: boolean;
   onChange?: () => void;
-  id?: string;
-  accept?: string;
+  name?: string;
+  defaultValue?: string;
   // dropdownSelections: string[];
 }
 
@@ -14,23 +13,23 @@ const Input: React.FC<InputProps> = ({
   value,
   disabled,
   onChange,
-  id,
-  accept,
+  name,
+  defaultValue,
+  ...otherProps
   // dropdownSelections,
 }) => {
   return (
     <>
-      {type === 'text' ||
-        (type === 'password' && (
-          <input
-            id={id}
-            type={type}
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            className="rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2"
-          />
-        ))}
+      {(type === 'text' || type === 'password') && (
+        <input
+          type={type}
+          {...otherProps}
+          name={name}
+          defaultValue={defaultValue}
+          disabled={disabled}
+          className="rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2"
+        />
+      )}
 
       {type === 'file' && (
         <input
