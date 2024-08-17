@@ -3,9 +3,7 @@ import Table from './Table';
 import CustomerRow from './CustomerRow';
 import Pagination from './Pagination';
 
-const CustomerTable = ({ serializeUsers }: any) => {
-  const users = JSON.parse(serializeUsers);
-
+const CustomerTable = ({ users }: any) => {
   return (
     <Table columns="grid-cols-[2rem_1.8fr_0.6fr_0.6fr_1.4fr_1.4fr_1fr_3.2rem]">
       <Table.Header as="header">

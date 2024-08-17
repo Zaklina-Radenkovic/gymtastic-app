@@ -3,12 +3,18 @@ import CustomersList from '../_components/CustomersList';
 import Button from '../_components/Button';
 import { Suspense } from 'react';
 import Spinner from '../_components/Spinner';
+import { getUsers } from '../_lib/data-service';
 
 export const metadata = {
   title: 'Customers',
 };
 
-export default function Page() {
+export default async function Page({ searchParams }: any) {
+  const users = await getUsers();
+  if (!users.length) return null;
+  const serializeUsers = JSON.stringify(users);
+  const sortBy = searchParams?.sortBy || 'name-asc';
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -19,7 +25,7 @@ export default function Page() {
       </div>
 
       <Suspense fallback={<Spinner />}>
-        <CustomersList />
+        <CustomersList sortBy={sortBy} serializeUsers={serializeUsers} />
       </Suspense>
     </>
   );
