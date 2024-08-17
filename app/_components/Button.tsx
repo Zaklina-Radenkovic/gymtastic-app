@@ -33,7 +33,6 @@ function Button({
     <button
       //@ts-ignore
       className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className} disabled:cursor-not-allowed disabled:bg-primary-500 disabled:text-primary-300`}
-      type={type}
       {...otherProps}
     >
       {children}
