@@ -1,20 +1,28 @@
 import Link from 'next/link';
-import UpdateUserDataForm from '@/app/_components/UpdateUserDataForm';
-import { ArrowLongLeftIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
-import UpdatePasswordForm from '@/app/_components/UpdatePasswordForm';
 import { DocumentData } from 'firebase/firestore';
+import { ArrowLongLeftIcon } from '@heroicons/react/16/solid';
+
+import UpdateUserDataForm from '@/app/_components/UpdateUserDataForm';
+import UpdatePasswordForm from '@/app/_components/UpdatePasswordForm';
+
 import { getUser } from '@/app/_lib/data-service';
 
 export const metadata = {
   title: 'Update profile',
 };
 
-export default async function Page({ params: { customerId } }: any) {
+export default async function Page({
+  params: { customerId },
+}: {
+  params: { customerId: string };
+}) {
   const user: DocumentData | undefined = await getUser(customerId);
 
   if (!user) return null;
+
   const { name, image, email } = user;
+
   return (
     <>
       <div className="mb-4">

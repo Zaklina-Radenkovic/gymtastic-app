@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLongLeftIcon, PencilSquareIcon } from '@heroicons/react/16/solid';
+import { DocumentData } from 'firebase/firestore';
 import CustomerDetails from '@/app/_components/CustomerDetails';
 
 import { getUser } from '@/app/_lib/data-service';
-import { DocumentData } from 'firebase/firestore';
 
 export const metadata = {
   title: 'Customers',
@@ -18,12 +18,17 @@ type User = {
   id: string;
 } | null;
 
-export default async function Page({ params: { customerId } }: any) {
+export default async function Page({
+  params: { customerId },
+}: {
+  params: { customerId: string };
+}) {
   const user: DocumentData | undefined = await getUser(customerId);
 
   if (!user) return null;
 
   const { name, image, email, phone } = user;
+
   return (
     <>
       <div className="mb-4">

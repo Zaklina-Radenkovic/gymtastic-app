@@ -1,15 +1,20 @@
-import { PlusIcon } from '@heroicons/react/16/solid';
-import CustomersList from '../_components/CustomersList';
-import Button from '../_components/Button';
 import { Suspense } from 'react';
+import { PlusIcon } from '@heroicons/react/16/solid';
+import Button from '../_components/Button';
 import Spinner from '../_components/Spinner';
+import CustomersList from '../_components/CustomersList';
+
 import { getUsers } from '../_lib/data-service';
 
 export const metadata = {
   title: 'Customers',
 };
 
-export default async function Page({ searchParams }: any) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: { sortBy?: string | undefined };
+}) {
   const users = await getUsers();
   if (!users.length) return null;
   const serializeUsers = JSON.stringify(users);

@@ -1,7 +1,8 @@
 'use client';
 
-import ButtonIcon from './ButtonIcon';
 import { MoonIcon, SunIcon } from '@heroicons/react/16/solid';
+import ButtonIcon from './ButtonIcon';
+
 import { useDarkMode } from '../_context/DarkModeContext';
 
 const DarkModeToggle = () => {
