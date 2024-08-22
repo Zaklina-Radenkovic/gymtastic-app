@@ -7,6 +7,7 @@ import {
 import defaultUser from '@/public/default-user.jpg';
 import Image from 'next/image';
 import ButtonIcon from './ButtonIcon';
+import DarkModeToggle from './DarkModeToggle';
 
 type User = {
   user: {
@@ -30,10 +31,13 @@ function Navigation() {
             <UserIcon className="h-6 w-6 text-indigo-600" />
           </ButtonIcon>
         </li>
-        <li>
+        {/* <li>
           <ButtonIcon>
             <SunIcon className="h-6 w-6 text-indigo-600" />
           </ButtonIcon>
+        </li> */}
+        <li>
+          <DarkModeToggle />
         </li>
         <li>
           <ButtonIcon>
