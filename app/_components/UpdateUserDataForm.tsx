@@ -4,7 +4,7 @@ import FormRow from './FormRow';
 import Input from './Input';
 import SubmitButton from './SubmitButton';
 
-function UpdateCustomerData({ user, id }: any) {
+function UpdateUserDataForm({ user, id }: any) {
   const { name, image, email } = user;
   return (
     <form
@@ -36,4 +36,4 @@ function UpdateCustomerData({ user, id }: any) {
     </form>
   );
 }
-export default UpdateCustomerData;
+export default UpdateUserDataForm;
