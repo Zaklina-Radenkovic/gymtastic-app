@@ -3,14 +3,15 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/16/solid';
 import ButtonIcon from './ButtonIcon';
 
-import { useDarkMode } from '../_context/DarkModeContext';
+import { useTheme } from '../_context/DarkModeContext';
 
 const DarkModeToggle = () => {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  // const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <ButtonIcon onClick={toggleDarkMode}>
-      {isDarkMode ? (
+    <ButtonIcon onClick={toggleTheme}>
+      {theme === 'dark' ? (
         <SunIcon className="h-6 w-6 text-indigo-600" />
       ) : (
         <MoonIcon className="h-6 w-6 text-indigo-600" />

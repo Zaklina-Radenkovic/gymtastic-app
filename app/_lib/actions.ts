@@ -1,4 +1,5 @@
 'use server';
+import { cookies } from 'next/headers';
 
 import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../_lib/firebase';
@@ -20,4 +21,8 @@ export async function updateCustomer(formData: any) {
   }
 
   revalidatePath(`/customers/${id}/edit`);
+}
+
+export async function setThemeCookies(theme: string) {
+  cookies().set('theme', theme, { path: '/', maxAge: 7 * 24 * 60 * 60 });
 }
