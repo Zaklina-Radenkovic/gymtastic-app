@@ -4,7 +4,7 @@ import SideNavigation from './_components/SideNavigation';
 import '@/app/_styles/globals.css';
 import { cookies } from 'next/headers';
 
-import { ThemeProvider } from './_context/DarkModeContext';
+import { ThemeProvider } from './_context/ThemeContext';
 
 export const metadata = {
   title: {
@@ -24,16 +24,32 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
+  // const cookieStore = cookies();
 
-  const initialTheme = cookieStore.get('theme')?.value || 'light';
+  // const initialTheme = cookieStore.get('theme')?.value || 'light';
 
-  // const initialTheme = 'light';
   // console.log('initialTheme ', initialTheme);
   return (
-    <html lang="en" data-theme={initialTheme}>
+    <html
+      lang="en"
+      // data-theme={initialTheme}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = document.cookie.match(/theme=(dark|light)/)?.[1] || 'light';
+                document.documentElement.classList.add(theme);
+              })();
+            `,
+          }}
+        />
+      </head>
       {/* <DarkModeProvider> */}
-      <ThemeProvider initialTheme={initialTheme}>
+      {/* <ThemeProvider initialTheme={initialTheme}> */}
+      <ThemeProvider>
         <body
           className={`${inter.className} grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] text-primary-800 antialiased transition-colors duration-300`}
         >
