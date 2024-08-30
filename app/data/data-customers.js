@@ -1,0 +1,95 @@
+import { add } from 'date-fns';
+
+function fromToday(numDays, withTime = false) {
+  const date = add(new Date(), { days: numDays });
+  if (!withTime) date.setUTCHours(0, 0, 0, 0);
+  return date.toISOString().slice(0, -1);
+}
+
+export const CUSTOMERS = [
+  {
+    created_at: fromToday(-20, true),
+    fullName: 'Jonas Schmedtmann',
+    email: 'hello@jonas.io',
+    phone: '+81 965-431-3024',
+    role: 'admin',
+    status: 'active',
+    memberSince: fromToday(0),
+    expirationDate: fromToday(7),
+    trainings: '6/12',
+    id: '1',
+  },
+  {
+    created_at: fromToday(-33, true),
+    fullName: 'Jonathan Smith',
+    email: 'johnsmith@test.eu',
+    phone: '+49 258-627-6644',
+    role: 'member',
+    status: 'inactive',
+    memberSince: fromToday(-23),
+    expirationDate: fromToday(-13),
+    trainings: '6/12',
+    id: '2',
+  },
+  {
+    created_at: fromToday(-27, true),
+    fullName: 'Jonatan Johansson',
+    email: 'jonatan@example.com',
+    phone: '+81 210-652-2785',
+    role: 'member',
+    status: 'active',
+    memberSince: fromToday(12),
+    expirationDate: fromToday(18),
+    trainings: '6/12',
+    id: '3',
+  },
+  {
+    created_at: fromToday(-45, true),
+    fullName: 'Jonas Mueller',
+    email: 'jonas@example.eu',
+    phone: '+81 210-652-2785',
+    role: 'member',
+    status: 'inactive',
+    memberSince: fromToday(-45),
+    expirationDate: fromToday(-29),
+    trainings: '6/12',
+    id: '4',
+  },
+  {
+    created_at: fromToday(-2, true),
+    fullName: 'Jonas Anderson',
+    email: 'anderson@example.com',
+    phone: '+81 210-652-2785',
+    role: 'member',
+    status: 'active',
+    memberSince: fromToday(15),
+    expirationDate: fromToday(18),
+    trainings: '6/12',
+    id: '5',
+  },
+  {
+    created_at: fromToday(-5, true),
+    fullName: 'Jonathan Williams',
+    email: 'jowi@gmail.com',
+    phone: '+81 210-652-2785',
+    role: 'member',
+    status: 'active',
+    memberSince: fromToday(1),
+    expirationDate: fromToday(18),
+    trainings: '6/12',
+    id: '6',
+  },
+
+  {
+    created_at: fromToday(-65, true),
+    fullName: 'Emma Watson',
+    email: 'emma@gmail.com',
+    phone: '+81 210-652-2785',
+    role: 'member',
+    status: 'inactive',
+    memberSince: fromToday(-25),
+    expirationDate: fromToday(-20),
+    trainings: '6/12',
+    id: '7',
+  },
+];
