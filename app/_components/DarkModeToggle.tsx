@@ -8,7 +8,7 @@ import { useTheme } from '../_context/ThemeContext';
 const DarkModeToggle = () => {
   // const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { theme, toggleTheme } = useTheme();
-  console.log(theme);
+  //console.log(theme);
 
   return (
     <ButtonIcon onClick={toggleTheme}>

@@ -23,7 +23,7 @@ const CustomerTable = ({ users }: any) => {
       />
 
       <Table.Footer>
-        <Pagination />
+        <Pagination count={users.length} />
       </Table.Footer>
     </Table>
   );
