@@ -4,7 +4,7 @@ import Table from './Table';
 
 type Customer = {
   customer: {
-    name: String;
+    fullName: String;
     email: String;
     status: String;
     id: String;
@@ -18,7 +18,7 @@ type Customer = {
 function CustomerRow({ customer }: Customer) {
   // console.log(customer);
   const {
-    name,
+    fullName,
     email,
     status,
     id: customerId,
@@ -32,7 +32,7 @@ function CustomerRow({ customer }: Customer) {
     <Table.Row>
       <div>p </div>
       <div className="flex flex-col gap-1">
-        <span className="font-medium">{name}</span>
+        <span className="font-medium">{fullName}</span>
         <span className="text-xs text-primary-600">{email}</span>
       </div>
       <div className="font-medium">{role}</div>

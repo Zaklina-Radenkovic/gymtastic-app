@@ -21,7 +21,7 @@ export default async function Page({
 
   if (!user) return null;
 
-  const { name, image, email } = user;
+  const { fullName, image, email } = user;
 
   return (
     <>
@@ -40,12 +40,12 @@ export default async function Page({
           width="60"
           height="60"
           src={image || '/default-user.jpg'}
-          alt={`Avatar of ${name}`}
+          alt={`Avatar of ${fullName}`}
           referrerPolicy="no-referrer"
           className="rounded-full"
         />
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-semibold leading-snug">{name}</h1>
+          <h1 className="text-3xl font-semibold leading-snug">{fullName}</h1>
           <span className="text-primary-600">{email}</span>
         </div>
       </div>

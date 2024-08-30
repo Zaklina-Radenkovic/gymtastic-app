@@ -16,6 +16,7 @@ export default async function Page({
   searchParams?: { sortBy?: string | undefined };
 }) {
   const users = await getUsers();
+  console.log(users);
   if (!users.length) return null;
   const serializeUsers = JSON.stringify(users);
   const sortBy = searchParams?.sortBy || 'name-asc';

@@ -5,14 +5,14 @@ import Input from './Input';
 import SubmitButton from './SubmitButton';
 
 function UpdateUserDataForm({ user, id }: any) {
-  const { name, image, email } = user;
+  const { fullName, image, email } = user;
   return (
     <form
       className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
       action={updateCustomer}
     >
       <FormRow label="Full name">
-        <Input defaultValue={name} name="name" type="text" />
+        <Input defaultValue={fullName} name="name" type="text" />
       </FormRow>
       <FormRow label="Email address">
         <Input type="text" name="email" defaultValue={email} />

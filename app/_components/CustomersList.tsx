@@ -11,7 +11,9 @@ async function CustomersList({ sortBy, serializeUsers }: any) {
   const sortedUsers =
     field === 'name'
       ? //@ts-ignore
-        usersArray.sort((a, b) => a.name.localeCompare(b.name) * modifier)
+        usersArray.sort(
+          (a, b) => a.fullName.localeCompare(b.fullName) * modifier,
+        )
       : //@ts-ignore
         usersArray.sort((a, b) => (a[field] - b[field]) * modifier);
 

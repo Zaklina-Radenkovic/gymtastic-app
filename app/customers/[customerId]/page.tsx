@@ -27,7 +27,7 @@ export default async function Page({
 
   if (!user) return null;
 
-  const { name, image, email, phone } = user;
+  const { fullName, image, email, phone } = user;
 
   return (
     <>
@@ -47,11 +47,11 @@ export default async function Page({
             width="40"
             height="40"
             src={image || '/default-user.jpg'}
-            alt={`Avatar of ${name}`}
+            alt={`Avatar of ${fullName}`}
             referrerPolicy="no-referrer"
             className="rounded-full"
           />
-          <h1 className="text-3xl font-semibold leading-snug">{name}</h1>
+          <h1 className="text-3xl font-semibold leading-snug">{fullName}</h1>
         </div>
 
         <Link
