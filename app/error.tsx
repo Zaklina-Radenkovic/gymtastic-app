@@ -7,6 +7,9 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  function handleClick() {
+    window.location.href = '/';
+  }
   return (
     <main className="flex flex-col items-center justify-center gap-6">
       <h1 className="text-3xl font-semibold">Something went wrong!</h1>
@@ -15,7 +18,7 @@ export default function Error({
       <button
         className="inline-block bg-yellow-500 px-6 py-3 text-lg text-primary-900"
         // TODO: navigate user to home page
-        onClick={reset}
+        onClick={handleClick}
       >
         Try again
       </button>
