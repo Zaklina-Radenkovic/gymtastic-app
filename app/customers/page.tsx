@@ -3,8 +3,10 @@ import { PlusIcon } from '@heroicons/react/16/solid';
 import Button from '../_components/Button';
 import Spinner from '../_components/Spinner';
 import CustomersList from '../_components/CustomersList';
+import { PAGE_SIZE } from '../_utils/constants';
 
 import { getUsers } from '../_lib/data-service';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const metadata = {
   title: 'Customers',
@@ -13,12 +15,20 @@ export const metadata = {
 export default async function Page({
   searchParams,
 }: {
-  searchParams?: { sortBy?: string | undefined };
+  searchParams?: {
+    query?: string;
+    sortBy?: string | undefined;
+    page?: string;
+  };
 }) {
-  const users = await getUsers();
-  console.log(users);
-  if (!users.length) return null;
-  const serializeUsers = JSON.stringify(users);
+  const currentPage = Number(searchParams?.page) || 1;
+  const term = searchParams?.query || '';
+
+  const { usersList, count } = await getUsers(currentPage, term);
+
+  if (!usersList.length) return null;
+
+  const serializeUsers = JSON.stringify(usersList);
   const sortBy = searchParams?.sortBy || 'name-asc';
 
   return (
@@ -30,8 +40,14 @@ export default async function Page({
         </Button>
       </div>
 
-      <Suspense fallback={<Spinner />}>
-        <CustomersList sortBy={sortBy} serializeUsers={serializeUsers} />
+      <Suspense fallback={<Spinner />} key={currentPage}>
+        <CustomersList
+          currentPage={currentPage}
+          sortBy={sortBy}
+          serializeUsers={serializeUsers}
+          term={term}
+          count={count}
+        />
       </Suspense>
     </>
   );

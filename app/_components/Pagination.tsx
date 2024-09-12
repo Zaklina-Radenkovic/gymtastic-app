@@ -1,12 +1,15 @@
 'use client';
 
+import { useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
 import { PAGE_SIZE } from '../_utils/constants';
 
-import { useCallback } from 'react';
+interface PaginationProps {
+  count: number;
+}
 
-function Pagination({ count }: Number | any) {
+function Pagination({ count }: PaginationProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -15,10 +18,10 @@ function Pagination({ count }: Number | any) {
     ? 1
     : Number(searchParams.get('page'));
 
-  const pageCount = Math.ceil(count / PAGE_SIZE);
+  const totalPages = Math.ceil(count / PAGE_SIZE);
 
   const createPageURL = useCallback(
-    (pageNumber: number | string) => {
+    (pageNumber: number) => {
       const params = new URLSearchParams(searchParams);
 
       params.set('page', pageNumber.toString());
@@ -27,7 +30,7 @@ function Pagination({ count }: Number | any) {
     [searchParams, pathname, router],
   );
 
-  if (pageCount <= 1) return null;
+  if (totalPages <= 1) return null;
 
   return (
     <div className="flex w-full items-center justify-between">
@@ -38,7 +41,10 @@ function Pagination({ count }: Number | any) {
         </span>{' '}
         to{' '}
         <span className="font-semibold">
-          {currentPage === pageCount ? count : currentPage * PAGE_SIZE}
+          {/* {currentPage === totalPages ? count : currentPage * PAGE_SIZE} */}
+          {currentPage === totalPages
+            ? count
+            : Math.min(currentPage * PAGE_SIZE, count)}
         </span>{' '}
         of <span className="font-semibold">{count}</span> results
       </p>
@@ -46,10 +52,11 @@ function Pagination({ count }: Number | any) {
       <div className="flex gap-2">
         <button
           className="btn-pagination"
-          onClick={() => {
-            const prev = currentPage === 1 ? currentPage : currentPage - 1;
-            createPageURL(prev);
-          }}
+          // onClick={() => {
+          //   const prev = currentPage === 1 ? currentPage : currentPage - 1;
+          //   createPageURL(prev);
+          // }}
+          onClick={() => createPageURL(Math.max(currentPage - 1, 1))}
           disabled={currentPage === 1}
         >
           <ChevronLeftIcon />
@@ -58,12 +65,13 @@ function Pagination({ count }: Number | any) {
 
         <button
           className="btn-pagination"
-          onClick={() => {
-            const next =
-              currentPage === pageCount ? currentPage : currentPage + 1;
-            createPageURL(next);
-          }}
-          disabled={currentPage === pageCount}
+          // onClick={() => {
+          //   const next =
+          //     currentPage === totalPages ? currentPage : currentPage + 1;
+          //   createPageURL(next);
+          // }}
+          onClick={() => createPageURL(Math.min(currentPage + 1, totalPages))}
+          disabled={currentPage === totalPages}
         >
           <span className="pr-1">Next</span>
           <ChevronRightIcon />

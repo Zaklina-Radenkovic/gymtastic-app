@@ -3,7 +3,7 @@ import Table from './Table';
 import CustomerRow from './CustomerRow';
 import Pagination from './Pagination';
 
-const CustomerTable = ({ users }: any) => {
+const CustomerTable = ({ users, count }: { users: []; count: number }) => {
   return (
     <Table columns="grid-cols-[2rem_1.8fr_0.6fr_0.6fr_1.4fr_1.4fr_1fr_3.2rem]">
       <Table.Header as="header">
@@ -23,7 +23,7 @@ const CustomerTable = ({ users }: any) => {
       />
 
       <Table.Footer>
-        <Pagination count={users.length} />
+        <Pagination count={count} />
       </Table.Footer>
     </Table>
   );

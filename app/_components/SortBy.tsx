@@ -12,12 +12,12 @@ const sortOptions = [
     label: 'Sort by name (Z-A)',
   },
   {
+    value: 'updatedAt-desc',
     label: 'Last update (newest)',
-    value: 'updatedAt|desc',
   },
   {
+    value: 'updatedAt-asc',
     label: 'Last update (oldest)',
-    value: 'updatedAt|asc',
   },
 ];
 

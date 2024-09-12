@@ -5,11 +5,19 @@ import {
   collection,
   doc,
   DocumentData,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  serverTimestamp,
+  startAfter,
   updateDoc,
   writeBatch,
 } from 'firebase/firestore';
 import { db } from '../_lib/firebase';
 import { revalidatePath } from 'next/cache';
+
+import { PAGE_SIZE } from '../_utils/constants';
 
 //updating customer data
 export async function updateCustomer(formData: any) {
@@ -17,7 +25,7 @@ export async function updateCustomer(formData: any) {
   const email = formData.get('email');
   const id = formData.get('id');
 
-  const updateData = { fullName, email, id };
+  const updateData = { fullName, email, id, timestamp: serverTimestamp() };
 
   try {
     const docRef = doc(db, 'users', id);
@@ -33,19 +41,19 @@ export async function setThemeCookies(theme: string) {
   cookies().set('theme', theme, { path: '/', maxAge: 7 * 24 * 60 * 60 });
 }
 
-/// upload customers data ////
-export const uploadCustomers = async function (
-  collectionKey: string,
-  data: DocumentData[],
-) {
-  const batch = writeBatch(db);
-  const collectionRef = collection(db, collectionKey);
+/// upload customers data - one time////
+// export const uploadCustomers = async function (
+//   collectionKey: string,
+//   data: DocumentData[],
+// ) {
+//   const batch = writeBatch(db);
+//   const collectionRef = collection(db, collectionKey);
 
-  data.forEach((obj) => {
-    const docRef = doc(collectionRef, obj.id);
-    batch.set(docRef, obj);
-  });
+//   data.forEach((obj) => {
+//     const docRef = doc(collectionRef, obj.id);
+//     batch.set(docRef, obj);
+//   });
 
-  await batch.commit();
-  console.log('done');
-};
+//   await batch.commit();
+//   console.log('done');
+// };
