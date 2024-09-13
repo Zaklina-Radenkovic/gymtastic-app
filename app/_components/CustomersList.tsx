@@ -26,7 +26,7 @@ import { getUsers } from '../_lib/data-service';
 async function CustomersList({ sortBy, serializeUsers, count }: any) {
   const usersArray = JSON.parse(serializeUsers);
 
-  console.log('count in list ', count);
+  //console.log('count in list ', count);
   const [field, direction] = sortBy.split('-');
   const modifier = direction === 'asc' ? 1 : -1;
 

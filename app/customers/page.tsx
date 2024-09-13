@@ -24,13 +24,14 @@ export default async function Page({
   const currentPage = Number(searchParams?.page) || 1;
   const term = searchParams?.query || '';
 
-  const { usersList, count } = await getUsers(currentPage, term);
+  const sortBy = searchParams?.sortBy || 'name-asc';
+  const sortOrder = sortBy.includes('desc') ? 'desc' : 'asc';
+
+  const { usersList, count } = await getUsers(currentPage, term, sortOrder);
 
   if (!usersList.length) return null;
 
   const serializeUsers = JSON.stringify(usersList);
-  const sortBy = searchParams?.sortBy || 'name-asc';
-
   return (
     <>
       <div className="flex items-center justify-between">

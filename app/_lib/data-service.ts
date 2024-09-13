@@ -20,6 +20,7 @@ import { notFound } from 'next/navigation';
 import { PAGE_SIZE } from '../_utils/constants';
 
 interface User {
+  fullName: unknown;
   id: string;
   // other fields
 }
@@ -27,6 +28,7 @@ interface User {
 export const getUsers = async function (
   page = 1,
   term?: string,
+  sortOrder: 'asc' | 'desc' = 'asc',
 ): Promise<{ usersList: User[]; count: number }> {
   const collectionRef = collection(db, 'users');
   let usersList: User[] = [];
@@ -34,7 +36,7 @@ export const getUsers = async function (
 
   try {
     // Build query constraints
-    let baseQuery = query(collectionRef, orderBy('fullName'));
+    let baseQuery = query(collectionRef, orderBy('fullName', sortOrder));
 
     // Add filtering constraints if a search term is provided
     if (term) {
@@ -86,6 +88,21 @@ export const getUsers = async function (
       });
 
       usersList = Object.values(uniqueUsers);
+
+      //Handle pagination
+      // if (page > 1) {
+      if (page > 1 && usersList.length >= (page - 1) * PAGE_SIZE) {
+        const lastIndex = (page - 1) * PAGE_SIZE - 1;
+        const lastUser = usersList[lastIndex]; // Correct index to get the last user of the previous page
+
+        if (lastUser) {
+          const paginatedQuery = query(
+            upperCaseQuery, // or lowerCaseQuery, since we only use ordering and limits
+            startAfter(lastUser.fullName), // Use lastUser's fullName for pagination
+            limit(PAGE_SIZE),
+          );
+        }
+      }
     } else {
       // Count query without filters
       const countSnapshot = await getCountFromServer(query(collectionRef));
@@ -98,12 +115,14 @@ export const getUsers = async function (
         const prevSnapshot = await getDocs(
           query(
             collectionRef,
-            orderBy('fullName'),
+            orderBy('fullName', sortOrder),
             limit((page - 1) * PAGE_SIZE),
           ),
         );
         const lastVisible = prevSnapshot.docs[prevSnapshot.docs.length - 1];
+
         if (lastVisible) {
+          console.log(`Last document on page ${page - 1}:`, lastVisible.data());
           baseQuery = query(
             baseQuery,
             startAfter(lastVisible),
