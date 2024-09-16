@@ -4,19 +4,19 @@ import Select from './Select';
 
 const sortOptions = [
   {
-    value: 'name-asc',
+    value: 'fullName-asc',
     label: 'Sort by name (A-Z)',
   },
   {
-    value: 'name-desc',
+    value: 'fullName-desc',
     label: 'Sort by name (Z-A)',
   },
   {
-    value: 'updatedAt-desc',
+    value: 'timestamp-desc',
     label: 'Last update (newest)',
   },
   {
-    value: 'updatedAt-asc',
+    value: 'timestamp-asc',
     label: 'Last update (oldest)',
   },
 ];

@@ -23,11 +23,15 @@ export default async function Page({
 }) {
   const currentPage = Number(searchParams?.page) || 1;
   const term = searchParams?.query || '';
+  const sortBy = searchParams?.sortBy || 'fullName-asc';
+  const [sortField, sortOrder] = sortBy.split('-');
 
-  const sortBy = searchParams?.sortBy || 'name-asc';
-  const sortOrder = sortBy.includes('desc') ? 'desc' : 'asc';
-
-  const { usersList, count } = await getUsers(currentPage, term, sortOrder);
+  const { usersList, count } = await getUsers(
+    currentPage,
+    term,
+    sortField as 'fullName' | 'timestamp',
+    sortOrder as 'asc' | 'desc',
+  );
 
   if (!usersList.length) return null;
 
