@@ -28,10 +28,11 @@ async function CustomersList({ sortBy, serializeUsers, count }: any) {
 
   //console.log('count in list ', count);
   const [field, direction] = sortBy.split('-');
+
   const modifier = direction === 'asc' ? 1 : -1;
 
   const sortedUsers =
-    field === 'name'
+    field === 'fullName'
       ? usersArray.sort(
           //@ts-ignore
           (a, b) => a.fullName.localeCompare(b.fullName) * modifier,
