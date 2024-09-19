@@ -2,7 +2,6 @@ import { Inter } from 'next/font/google';
 import Header from './_components/Header';
 import SideNavigation from './_components/SideNavigation';
 import '@/app/_styles/globals.css';
-import { cookies } from 'next/headers';
 
 import { ThemeProvider } from './_context/ThemeContext';
 
