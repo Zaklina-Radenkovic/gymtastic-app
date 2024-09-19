@@ -21,12 +21,12 @@ const sortOptions = [
   },
 ];
 
-function SortBy({ sortBy }: any) {
+function SortBy({ sortBy }: { sortBy: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const params = new URLSearchParams(searchParams);
     params.set('sortBy', e.target.value);
     router.replace(`${pathname}?${params.toString()}`);

@@ -1,5 +1,17 @@
 'use client';
 
+type Variations = {
+  primary: string;
+  secondary: string;
+  danger: string;
+};
+
+type Sizes = {
+  small: string;
+  medium: string;
+  large: string;
+};
+
 const sizes = {
   small: 'text-xs py-1 px-3 uppercase font-semibold text-center',
   medium: 'text-sm py-3 px-4 font-medium',
@@ -23,15 +35,14 @@ function Button({
   ...otherProps
 }: {
   type?: 'button' | 'submit' | 'reset' | undefined;
-  size?: string;
-  variation?: string;
-  children: string | any;
+  size?: keyof Sizes;
+  variation?: keyof Variations;
+  children: React.ReactNode;
   disabled?: boolean;
   className?: string;
 }): JSX.Element {
   return (
     <button
-      //@ts-ignore
       className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className} disabled:cursor-not-allowed disabled:bg-primary-500 disabled:text-primary-300`}
       {...otherProps}
     >

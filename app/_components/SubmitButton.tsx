@@ -5,9 +5,11 @@ import { useFormStatus } from 'react-dom';
 function SubmitButton({
   children,
   pendingLabel,
+  onClick,
 }: {
-  children: any;
-  pendingLabel?: any;
+  children: React.ReactNode;
+  pendingLabel?: string;
+  onClick?: () => void;
 }) {
   const { pending } = useFormStatus();
 

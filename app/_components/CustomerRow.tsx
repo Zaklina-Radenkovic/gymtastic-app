@@ -1,23 +1,10 @@
 import Link from 'next/link';
 import { PencilSquareIcon, EyeIcon } from '@heroicons/react/16/solid';
 import Table from './Table';
+import { Customer } from '../_types/models';
 
-type Customer = {
+function CustomerRow({
   customer: {
-    fullName: String;
-    email: String;
-    status: String;
-    id: String;
-    role: String;
-    memberSince: Date;
-    expirationDate: Date;
-    trainings: String;
-  };
-};
-
-function CustomerRow({ customer }: Customer) {
-  // console.log(customer);
-  const {
     fullName,
     email,
     status,
@@ -26,8 +13,10 @@ function CustomerRow({ customer }: Customer) {
     memberSince,
     expirationDate,
     trainings,
-  } = customer;
-
+  },
+}: {
+  customer: Customer;
+}) {
   return (
     <Table.Row>
       <div>p </div>

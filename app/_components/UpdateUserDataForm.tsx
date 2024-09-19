@@ -1,11 +1,20 @@
-import { updateCustomer } from '../_lib/actions';
-import Button from './Button';
 import FormRow from './FormRow';
 import Input from './Input';
+import Button from './Button';
 import SubmitButton from './SubmitButton';
 
-function UpdateUserDataForm({ user, id }: any) {
+import { DocumentData } from 'firebase/firestore';
+
+import { updateCustomer } from '../_lib/actions';
+
+interface UpdateUserDataFormProps {
+  user: DocumentData;
+  id: string;
+}
+
+function UpdateUserDataForm({ user, id }: UpdateUserDataFormProps) {
   const { fullName, image, email } = user;
+
   return (
     <form
       className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"

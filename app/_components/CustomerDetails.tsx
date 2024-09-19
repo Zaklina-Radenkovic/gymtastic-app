@@ -3,7 +3,12 @@
 import Subscription from './Subscription';
 import Table from './Table';
 
-const CustomerDetails = ({ email, phone }: any) => {
+interface CustomerDetailsProps {
+  email: string;
+  phone: number;
+}
+
+const CustomerDetails = ({ email, phone }: CustomerDetailsProps) => {
   return (
     <>
       <div className="flex flex-col gap-4">

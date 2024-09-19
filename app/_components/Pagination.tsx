@@ -5,11 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
 import { PAGE_SIZE } from '../_utils/constants';
 
-interface PaginationProps {
-  count: number;
-}
-
-function Pagination({ count }: PaginationProps) {
+function Pagination({ count }: { count: number }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,7 +37,6 @@ function Pagination({ count }: PaginationProps) {
         </span>{' '}
         to{' '}
         <span className="font-semibold">
-          {/* {currentPage === totalPages ? count : currentPage * PAGE_SIZE} */}
           {currentPage === totalPages
             ? count
             : Math.min(currentPage * PAGE_SIZE, count)}

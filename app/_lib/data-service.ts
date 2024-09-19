@@ -18,7 +18,7 @@ import { PAGE_SIZE } from '../_utils/constants';
 interface User {
   timestamp(
     fullName: unknown,
-    timestamp: any,
+    timestamp: Date,
   ): import('@firebase/firestore').QueryConstraint;
   fullName: unknown;
   id: string;
@@ -211,7 +211,7 @@ export const getUsers = async function (
 
 // GET USER/////
 
-export const getUser = async function (id: any) {
+export const getUser = async function (id: string) {
   const docRef = doc(db, 'users', id);
   const docSnap = await getDoc(docRef);
 

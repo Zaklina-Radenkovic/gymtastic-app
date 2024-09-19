@@ -1,7 +1,12 @@
-type SelectProps = {
-  options: any;
+interface Option {
   value: string;
-  onChange: (e: any) => void;
+  label: string;
+}
+
+type SelectProps = {
+  options: Option[];
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 function Select({ options, value, onChange, ...props }: SelectProps) {
@@ -13,7 +18,7 @@ function Select({ options, value, onChange, ...props }: SelectProps) {
       value={value}
       onChange={onChange}
     >
-      {options.map((option: any) => (
+      {options.map((option: Option) => (
         <option key={option.value} value={option.value}>
           {option.label}
         </option>

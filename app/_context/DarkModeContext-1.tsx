@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorageState } from '../_hooks/useLocalStorageState';
 
 interface DarkModeContextType {
-  isDarkMode: boolean | any;
+  isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 

@@ -1,12 +1,16 @@
 'use client';
 import { createContext, useContext } from 'react';
 
+interface TableContextValue {
+  columns?: string;
+}
+
 type TableContextProps = {
   children: React.ReactNode;
-  columns: String;
+  columns: string;
 };
 
-const TableContext = createContext({});
+const TableContext = createContext<TableContextValue | undefined>(undefined);
 
 function Table({ columns, children }: TableContextProps) {
   return (
@@ -27,10 +31,11 @@ function Header({
   as,
 }: {
   children: React.ReactNode;
-  className?: String;
-  as: JSX.IntrinsicElements | React.ComponentType<any> | String;
+  className?: string;
+  as: JSX.IntrinsicElements | React.ComponentType<any> | string;
 }) {
-  const { columns }: any = useContext(TableContext);
+  const { columns } = useContext(TableContext) || {};
+
   return (
     <div
       role="row"
@@ -42,7 +47,8 @@ function Header({
 }
 
 function Row({ children }: { children: React.ReactNode }) {
-  const { columns }: any = useContext(TableContext);
+  const { columns } = useContext(TableContext) || {};
+
   return (
     <div
       role="row"
@@ -59,7 +65,12 @@ function Row({ children }: { children: React.ReactNode }) {
 //   return <StyledBody>{data.map(render)}</StyledBody>;
 // }
 
-function Body({ data, render }: any) {
+interface BodyProps<T> {
+  data: T[];
+  render: (item: T) => React.ReactNode;
+}
+
+function Body<T>({ data, render }: BodyProps<T>) {
   return <section className="mx-0 my-2">{data.map(render)}</section>;
 }
 

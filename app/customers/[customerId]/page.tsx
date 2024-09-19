@@ -10,14 +10,6 @@ export const metadata = {
   title: 'Customers',
 };
 
-type User = {
-  name: string;
-  email: string;
-  image?: string;
-  phone?: number;
-  id: string;
-} | null;
-
 export default async function Page({
   params: { customerId },
 }: {

@@ -1,26 +1,12 @@
 'use server';
 import { cookies } from 'next/headers';
 
-import {
-  collection,
-  doc,
-  DocumentData,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-  startAfter,
-  updateDoc,
-  writeBatch,
-} from 'firebase/firestore';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../_lib/firebase';
 import { revalidatePath } from 'next/cache';
 
-import { PAGE_SIZE } from '../_utils/constants';
-
 //updating customer data
-export async function updateCustomer(formData: any) {
+export async function updateCustomer(formData: { get: (arg0: string) => any }) {
   const fullName = formData.get('name');
   const email = formData.get('email');
   const id = formData.get('id');
