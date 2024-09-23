@@ -4,6 +4,8 @@
 //   userId: string;
 // };
 
+import { Timestamp } from 'firebase/firestore';
+
 // export type Event = {
 //   id: string;
 //   title: string;
@@ -23,10 +25,10 @@ export type Customer = {
   // avatar: string;
   email: string;
   fullName: string;
-  expirationDate: Date;
-  memberSince: Date;
+  expirationDate: Timestamp;
+  memberSince: Timestamp;
   role: string;
   status: string;
-  timestamp: Date;
+  timestamp: Timestamp;
   trainings: string;
 };

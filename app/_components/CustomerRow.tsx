@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { PencilSquareIcon, EyeIcon } from '@heroicons/react/16/solid';
 import Table from './Table';
 import { Customer } from '../_types/models';
+import convertTimestamp from '../_utils/helpers';
 
 function CustomerRow({
   customer: {
@@ -26,8 +27,8 @@ function CustomerRow({
       </div>
       <div className="font-medium">{role}</div>
       <div className="font-medium">{status}</div>
-      <div className="font-medium">07/08/2023</div>
-      <div className="font-medium">07-08-2024</div>
+      <div className="font-medium">{convertTimestamp(memberSince)}</div>
+      <div className="font-medium">{convertTimestamp(expirationDate)}</div>
       <div className="font-medium">{trainings}</div>
 
       <div className="flex flex-col justify-center gap-1 text-primary-600">
