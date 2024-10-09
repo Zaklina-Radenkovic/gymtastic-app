@@ -59,7 +59,7 @@ function Navigation() {
 
 function User({ user: { name, image } }: User) {
   return (
-    <>
+    <div className="flex items-center gap-3">
       <Image
         width="40"
         height="40"
@@ -69,7 +69,7 @@ function User({ user: { name, image } }: User) {
         className="rounded-full"
       />
       <span>{name}</span>
-    </>
+    </div>
   );
 }
 
