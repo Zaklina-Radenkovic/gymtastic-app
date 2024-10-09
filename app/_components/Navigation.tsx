@@ -1,4 +1,4 @@
-import Link from 'next/link';
+'use client';
 import {
   UserIcon,
   SunIcon,
@@ -8,6 +8,7 @@ import defaultUser from '@/public/default-user.jpg';
 import Image from 'next/image';
 import ButtonIcon from './ButtonIcon';
 import DarkModeToggle from './DarkModeToggle';
+import { useRouter } from 'next/navigation';
 
 type User = {
   user: {
@@ -22,12 +23,19 @@ const user = {
 };
 
 function Navigation() {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/account');
+  };
+
   return (
     <nav className="flex items-center justify-between gap-10">
       <User user={user} />
+
       <ul className="flex gap-2">
         <li>
-          <ButtonIcon>
+          <ButtonIcon onClick={handleClick}>
             <UserIcon className="h-6 w-6 text-indigo-600" />
           </ButtonIcon>
         </li>
@@ -51,7 +59,7 @@ function Navigation() {
 
 function User({ user: { name, image } }: User) {
   return (
-    <Link href="/account" className="flex items-center gap-3">
+    <>
       <Image
         width="40"
         height="40"
@@ -61,7 +69,7 @@ function User({ user: { name, image } }: User) {
         className="rounded-full"
       />
       <span>{name}</span>
-    </Link>
+    </>
   );
 }
 

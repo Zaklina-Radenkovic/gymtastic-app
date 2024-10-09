@@ -24,16 +24,16 @@ export default async function Page({
   const sortBy = searchParams?.sortBy || 'fullName-asc';
   const [sortField, sortOrder] = sortBy.split('-');
 
-  // const { usersList, count } = await getUsers(
-  //   currentPage,
-  //   term,
-  //   sortField as 'fullName' | 'timestamp',
-  //   sortOrder as 'asc' | 'desc',
-  // );
+  const { usersList, count } = await getUsers(
+    currentPage,
+    term,
+    sortField as 'fullName' | 'timestamp',
+    sortOrder as 'asc' | 'desc',
+  );
 
-  // if (!usersList.length) return null;
+  if (!usersList.length) return null;
 
-  // const serializeUsers = JSON.stringify(usersList);
+  const serializeUsers = JSON.stringify(usersList);
 
   return (
     <>
@@ -45,11 +45,11 @@ export default async function Page({
       </div>
 
       <Suspense fallback={<Spinner />} key={currentPage}>
-        {/* <CustomersList
+        <CustomersList
           sortBy={sortBy}
           serializeUsers={serializeUsers}
           count={count}
-        /> */}
+        />
       </Suspense>
     </>
   );

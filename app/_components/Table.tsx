@@ -71,6 +71,13 @@ interface BodyProps<T> {
 }
 
 function Body<T>({ data, render }: BodyProps<T>) {
+  if (!data.length)
+    return (
+      <p className="m-8 text-center text-sm font-medium">
+        No data to show at the moment
+      </p>
+    );
+
   return <section className="mx-0 my-2">{data.map(render)}</section>;
 }
 
