@@ -40,7 +40,6 @@ function UpdateUserDataForm({ user, id }: UpdateUserDataFormProps) {
           Cancel
         </Button>
         <SubmitButton pendingLabel="Updating...">Update account</SubmitButton>
-        {/* <Button variation="danger">Delete</Button> */}
       </FormRow>
     </form>
   );

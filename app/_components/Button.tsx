@@ -32,6 +32,7 @@ function Button({
   disabled,
   className,
   type,
+  onClick,
   ...otherProps
 }: {
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -40,9 +41,11 @@ function Button({
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
+  onClick?: () => void;
 }): JSX.Element {
   return (
     <button
+      onClick={onClick}
       className={`${variations[variation]} rounded-sm border-none shadow-sm ${sizes[size]} ${className} disabled:cursor-not-allowed disabled:bg-primary-500 disabled:text-primary-300`}
       {...otherProps}
     >
