@@ -5,40 +5,45 @@ import {
   UserIcon,
   UsersIcon,
   Cog6ToothIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/react/16/solid';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
+import NavLink from './NavLink';
 
 const navLinks = [
   {
     href: '/',
     title: 'Calendar',
-    icon: (
-      <CalendarDaysIcon className="h-5 w-5 text-primary-50 hover:text-primary-100" />
-    ),
+    icon: <CalendarDaysIcon className="h-5 w-5 text-primary-600" />,
   },
   {
     href: '/customers',
     title: 'Customers',
-    icon: (
-      <UsersIcon className="h-5 w-5 text-primary-50 hover:text-primary-100" />
-    ),
+    icon: <UsersIcon className="h-5 w-5 text-primary-600" />,
   },
   {
     href: '/account',
     title: 'Account',
-    icon: (
-      <UserIcon className="h-5 w-5 text-primary-50 hover:text-primary-100" />
-    ),
+    icon: <UserIcon className="h-5 w-5 text-primary-600" />,
   },
   {
     href: '/settings',
     title: 'Settings',
-    icon: (
-      <Cog6ToothIcon className="h-5 w-5 text-primary-50 hover:text-primary-100" />
-    ),
+    icon: <Cog6ToothIcon className="h-5 w-5 text-primary-600" />,
+    subsections: [
+      {
+        href: '/settings/subscriptions',
+        title: 'Subscriptions',
+        icon: (
+          <ClipboardDocumentListIcon className="h-5 w-5 text-primary-600" />
+        ),
+      },
+    ],
   },
 ];
+
+
 
 function SideNavigation() {
   const pathname = usePathname();
@@ -49,20 +54,7 @@ function SideNavigation() {
       <nav>
         <ul className="flex flex-col gap-3 text-lg">
           {navLinks.map((link) => {
-            return (
-              <li key={link.title}>
-                <span></span>
-                <Link
-                  className={`flex items-center gap-4 px-5 py-3 font-semibold text-primary-50 transition-colors hover:bg-primary-800 hover:text-primary-100 ${
-                    pathname === link.href ? 'bg-primary-800' : ''
-                  }`}
-                  href={link.href}
-                >
-                  {link.icon}
-                  <span>{link.title}</span>
-                </Link>
-              </li>
-            );
+            return <NavLink link={link} key={link.title} pathname={pathname} />;
           })}
         </ul>
       </nav>

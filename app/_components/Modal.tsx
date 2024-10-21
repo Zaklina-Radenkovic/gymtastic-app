@@ -6,8 +6,6 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
-  useEffect,
-  useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
