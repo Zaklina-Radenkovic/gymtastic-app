@@ -11,6 +11,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useOutsideClick } from '../_hooks/useOutsideClicki';
 
 interface ModalContextValue {
   openName: string | undefined;
@@ -61,17 +62,8 @@ function Window({
   name: string;
 }) {
   const { openName, close } = useContext(ModalContext);
-  const ref = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    function handleClick(e: { target: any }) {
-      if (ref.current && !ref.current.contains(e.target)) close();
-    }
-
-    document.addEventListener('click', handleClick, true);
-
-    return () => document.removeEventListener('click', handleClick, true);
-  }, [close]);
+  const ref = useOutsideClick(close);
 
   if (name !== openName) return null;
 
