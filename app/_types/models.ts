@@ -32,3 +32,12 @@ export type Customer = {
   timestamp: Timestamp;
   trainings: string;
 };
+
+export type Subscription = {
+  intervalCount: number;
+  interval: string;
+  price: number;
+  currency: string;
+  totalTrainings: number;
+  id: string;
+};
