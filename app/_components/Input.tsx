@@ -5,7 +5,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange?: () => void;
   name?: string;
   defaultValue?: string;
-  // dropdownSelections: string[];
+  className?: string;
+  dropdownSelections?: string[];
+  label?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -15,8 +17,10 @@ const Input: React.FC<InputProps> = ({
   onChange,
   name,
   defaultValue,
+  className,
+  dropdownSelections,
+  label,
   ...otherProps
-  // dropdownSelections,
 }) => {
   return (
     <>
@@ -27,7 +31,7 @@ const Input: React.FC<InputProps> = ({
           name={name}
           defaultValue={defaultValue}
           disabled={disabled}
-          className="rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2"
+          className={`rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2 ${className}`}
         />
       )}
 
@@ -38,29 +42,43 @@ const Input: React.FC<InputProps> = ({
         />
       )}
 
-      {/* {type === 'dropdown' && (
-          <div>
-            <label className="block pb-5" htmlFor="search">
-              {label}
-            </label>
-  
-            <select
-              onChange={onChange}
-              value={value}
-              id="search"
-              className="mb-6 w-full rounded-lg bg-gray-light px-2.5 py-3 focus:outline-1 focus:outline-primary sm:px-5"
-            >
-              {dropdownSelections &&
-                dropdownSelections.map((s) => {
-                  return (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
-        )} */}
+      {type === 'dropdown' && (
+        <div className="flex flex-col gap-3">
+          <label htmlFor="search" className="leading-4">
+            {label}
+          </label>
+
+          <select
+            onChange={onChange}
+            value={value}
+            id="search"
+            className="bg-gray-light focus:outline-primary w-full rounded-lg px-2.5 py-3 focus:outline-1 sm:px-5"
+          >
+            {dropdownSelections &&
+              dropdownSelections.map((s) => {
+                return (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                );
+              })}
+          </select>
+        </div>
+      )}
+
+      {type === 'number' && (
+        <div className="flex flex-col gap-3">
+          <label className="leading-4">{label}</label>
+          <input
+            type={type}
+            {...otherProps}
+            name={name}
+            defaultValue={defaultValue}
+            // disabled={disabled}
+            className={`rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2 ${className}`}
+          />
+        </div>
+      )}
 
       {/* {type === 'textarea' && (
         <>
