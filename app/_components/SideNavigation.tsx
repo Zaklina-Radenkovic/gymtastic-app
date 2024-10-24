@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+
 import {
   CalendarDaysIcon,
   UserIcon,
@@ -33,6 +33,13 @@ const navLinks = [
     icon: <Cog6ToothIcon className="h-5 w-5 text-primary-600" />,
     subsections: [
       {
+        href: '/settings',
+        title: 'General',
+        icon: (
+          <ClipboardDocumentListIcon className="h-5 w-5 text-primary-600" />
+        ),
+      },
+      {
         href: '/settings/subscriptions',
         title: 'Subscriptions',
         icon: (
@@ -42,8 +49,6 @@ const navLinks = [
     ],
   },
 ];
-
-
 
 function SideNavigation() {
   const pathname = usePathname();
