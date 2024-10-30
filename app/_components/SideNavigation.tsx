@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import {
   CalendarDaysIcon,
   UserIcon,
@@ -7,7 +8,6 @@ import {
   Cog6ToothIcon,
   ClipboardDocumentListIcon,
 } from '@heroicons/react/16/solid';
-import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 import NavLink from './NavLink';
 

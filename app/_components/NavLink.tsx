@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
-import { useOutsideClick } from '../_hooks/useOutsideClicki';
+import { useOutsideClick } from '../_hooks/useOutsideClick';
 
 type NavLinkType =
   | {

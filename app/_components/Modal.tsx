@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useOutsideClick } from '../_hooks/useOutsideClicki';
+import { useOutsideClick } from '../_hooks/useOutsideClick';
 
 interface ModalContextValue {
   openName: string | undefined;
@@ -49,7 +49,11 @@ function Open({
 }) {
   const { open } = useContext(ModalContext);
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  return cloneElement(children, {
+    onClick: () => {
+      console.log('open'), open(opensWindowName);
+    },
+  });
 }
 
 function Window({
