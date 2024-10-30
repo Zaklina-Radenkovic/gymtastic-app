@@ -42,10 +42,10 @@ export default function Page() {
         </div>
       </form>
 
-      <div className="flex flex-wrap justify-center">
+      <div className="mx-36 flex flex-wrap justify-between">
         <form
           action=""
-          className="mx-10 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-8 py-6 text-sm"
+          className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
         >
           <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
             Calendar starting hour
@@ -68,7 +68,7 @@ export default function Page() {
 
         <form
           action=""
-          className="mx-10 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-8 py-6 text-sm"
+          className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
         >
           <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
             Calendar ending hour
