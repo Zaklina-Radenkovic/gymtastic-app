@@ -1,5 +1,7 @@
 import { Subscription } from '@/app/_types/models';
 import SubscriptionTable from '@/app/_components/SubscriptionTable';
+import NewSubscription from '@/app/_components/AddSubscriptionForm';
+import AddSubscriptionForm from '@/app/_components/AddSubscriptionForm';
 
 export const metadata = {
   title: 'Subscriptions',
@@ -68,6 +70,7 @@ export default function Page() {
   return (
     <>
       <h1 className="text-3xl font-bold">Subscriptions</h1>
+      {/* <AddSubscriptionForm /> */}
       <SubscriptionTable subscriptions={subscriptions} />
     </>
   );

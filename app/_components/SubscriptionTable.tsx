@@ -1,7 +1,8 @@
 'use client';
 import Table from '@/app/_components/Table';
-import { Subscription } from '@/app/_types/models';
 import SubscriptionRow from './SubscriptionRow';
+
+import { Subscription } from '@/app/_types/models';
 
 function SubscriptionTable({
   subscriptions,

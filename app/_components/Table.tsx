@@ -46,13 +46,19 @@ function Header({
   );
 }
 
-function Row({ children }: { children: React.ReactNode }) {
+function Row({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const { columns } = useContext(TableContext) || {};
 
   return (
     <div
       role="row"
-      className={`grid items-center gap-x-7 border-b-[1px] border-primary-200 px-4 py-3 ${columns} *:ml-1 last:border-b-0 has-[button]:flex has-[button]:justify-end has-[button]:pb-2`}
+      className={`grid items-center gap-x-7 border-b-[1px] border-primary-200 px-4 py-3 ${columns} *:ml-1 last:border-b-0 has-[button]:flex has-[button]:justify-end has-[button]:pb-2 ${className}`}
     >
       {children}
     </div>
