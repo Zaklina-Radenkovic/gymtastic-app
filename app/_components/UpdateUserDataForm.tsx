@@ -12,8 +12,8 @@ interface UpdateUserDataFormProps {
   id: string;
 }
 
-function UpdateUserDataForm({ user, id }: UpdateUserDataFormProps) {
-  const { fullName, image, email } = user;
+function UpdateUserDataForm({ user }: DocumentData) {
+  const { fullName, image, email, id } = user;
 
   return (
     <form

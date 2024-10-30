@@ -5,18 +5,26 @@ import ConfirmDeleteForm from './ConfirmDeleteForm';
 
 function ConfirmDelete() {
   return (
-    <Modal>
-      <Modal.Open opens="delete">
-        <Button variation="danger">Delete account</Button>
-      </Modal.Open>
+    <div className="flex flex-col gap-4">
+      <h3 className="text-lg font-medium leading-snug">Delete your account</h3>
+      <div className="flex items-center justify-between rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm">
+        <p className="font-medium">
+          Delete your account and all of your source data.
+        </p>
+        <Modal>
+          <Modal.Open opens="delete">
+            <Button variation="danger">Delete account</Button>
+          </Modal.Open>
 
-      <Modal.Window name="delete">
-        <ConfirmDeleteForm
-          resourceName="account"
-          onCloseModal={() => close()}
-        />
-      </Modal.Window>
-    </Modal>
+          <Modal.Window name="delete">
+            <ConfirmDeleteForm
+              resourceName="account"
+              onCloseModal={() => close()}
+            />
+          </Modal.Window>
+        </Modal>
+      </div>
+    </div>
   );
 }
 
