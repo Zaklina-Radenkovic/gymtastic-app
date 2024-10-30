@@ -7,7 +7,7 @@ type SettingsFormProps = {
 function SettingsForm({ title, label1, label2 }: SettingsFormProps) {
   return (
     <form className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6">
-      <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-lg font-medium">
+      <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text- base font-medium">
         {title}
       </h3>
 

@@ -7,6 +7,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
+      <h1 className="text-3xl font-bold">Settings</h1>
       <SettingsForm
         title="Show participants of event"
         label1="All users"
@@ -30,7 +31,7 @@ export default function Page() {
         className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
       >
         <div className="flex items-center justify-between gap-3">
-          <h3 className="font-medium">
+          <h3 className="text-base font-medium">
             Default number of participants in new event
           </h3>
 
@@ -41,36 +42,18 @@ export default function Page() {
         </div>
       </form>
 
-      <form
-        action=""
-        className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-      >
-        <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-lg font-medium">
-          Calendar starting hour
-        </h3>
-        <div className="-mx-3 flex flex-wrap">
-          <div className="w-full px-3 sm:w-1/2">
+      <div className="flex flex-wrap justify-center">
+        <form
+          action=""
+          className="mx-10 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-8 py-6 text-sm"
+        >
+          <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
+            Calendar starting hour
+          </h3>
+
+          <div className="w-full">
             <div className="mb-5">
-              <label
-                htmlFor="date"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
-                Date
-              </label>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                className="w-full rounded-md border border-[#e0e0e0] bg-primary-100 px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-              />
-            </div>
-          </div>
-          <div className="w-full px-3 sm:w-1/2">
-            <div className="mb-5">
-              <label
-                htmlFor="time"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
+              <label htmlFor="time" className="mb-3 block">
                 Time
               </label>
               <input
@@ -81,39 +64,19 @@ export default function Page() {
               />
             </div>
           </div>
-        </div>
-      </form>
+        </form>
 
-      <form
-        action=""
-        className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-      >
-        <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-lg font-medium">
-          Calendar ending hour
-        </h3>
-        <div className="-mx-3 flex flex-wrap">
-          <div className="w-full px-3 sm:w-1/2">
+        <form
+          action=""
+          className="mx-10 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-8 py-6 text-sm"
+        >
+          <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
+            Calendar ending hour
+          </h3>
+
+          <div className="w-full">
             <div className="mb-5">
-              <label
-                htmlFor="date"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
-                Date
-              </label>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                className="w-full rounded-md border border-[#e0e0e0] bg-primary-100 px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-              />
-            </div>
-          </div>
-          <div className="w-full px-3 sm:w-1/2">
-            <div className="mb-5">
-              <label
-                htmlFor="time"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
+              <label htmlFor="time" className="mb-3 block">
                 Time
               </label>
               <input
@@ -124,14 +87,14 @@ export default function Page() {
               />
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <form
         action=""
         className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
       >
-        <h3 className="mb-5 border-b border-primary-400 pb-2 font-medium">
+        <h3 className="mb-5 border-b border-primary-400 pb-2 text-base font-medium">
           Other languages besides English. Check with admin for adding more
           options.
         </h3>
