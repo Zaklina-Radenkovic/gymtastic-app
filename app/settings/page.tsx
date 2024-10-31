@@ -1,3 +1,4 @@
+import Form from '../_components/Form';
 import SettingsForm from '../_components/SettingsForm';
 
 export const metadata = {
@@ -26,10 +27,7 @@ export default function Page() {
         label2="disabled"
       />
 
-      <form
-        action=""
-        className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-      >
+      <Form className="mx-36">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-base font-medium">
             Default number of participants in new event
@@ -40,13 +38,10 @@ export default function Page() {
             className="w-20 rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2"
           />
         </div>
-      </form>
+      </Form>
 
       <div className="mx-36 flex flex-wrap justify-between">
-        <form
-          action=""
-          className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-        >
+        <Form>
           <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
             Calendar starting hour
           </h3>
@@ -64,12 +59,9 @@ export default function Page() {
               />
             </div>
           </div>
-        </form>
+        </Form>
 
-        <form
-          action=""
-          className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-        >
+        <Form>
           <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-base font-medium">
             Calendar ending hour
           </h3>
@@ -87,13 +79,10 @@ export default function Page() {
               />
             </div>
           </div>
-        </form>
+        </Form>
       </div>
 
-      <form
-        action=""
-        className="mx-36 overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-      >
+      <Form className="mx-36">
         <h3 className="mb-5 border-b border-primary-400 pb-2 text-base font-medium">
           Other languages besides English. Check with admin for adding more
           options.
@@ -128,7 +117,7 @@ export default function Page() {
             </label>
           </div>
         </div>
-      </form>
+      </Form>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import Form from './Form';
 import FormRow from './FormRow';
 import Input from './Input';
 import Button from './Button';
@@ -7,7 +8,7 @@ const intervalOptions = ['day', 'month'];
 
 function AddSubscriptionForm({ subscriptionId = {} }) {
   return (
-    <form className="max-w-xs overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-5 py-6 text-sm">
+    <Form className="max-w-xs">
       <h3 className="mb-5 border-b border-primary-400 pb-2 text-center text-lg font-medium">
         Add New Subscription
       </h3>
@@ -42,7 +43,7 @@ function AddSubscriptionForm({ subscriptionId = {} }) {
         </Button>
         <SubmitButton pendingLabel="Save...">Save</SubmitButton>
       </FormRow>
-    </form>
+    </Form>
   );
 }
 

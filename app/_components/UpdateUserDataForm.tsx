@@ -6,6 +6,7 @@ import SubmitButton from './SubmitButton';
 import { DocumentData } from 'firebase/firestore';
 
 import { updateCustomer } from '../_lib/actions';
+import Form from './Form';
 
 interface UpdateUserDataFormProps {
   user: DocumentData;
@@ -16,10 +17,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
   const { fullName, image, email, id } = user;
 
   return (
-    <form
-      className="overflow-hidden rounded-md border border-primary-200 bg-primary-50 px-10 py-6 text-sm"
-      action={updateCustomer}
-    >
+    <Form action={updateCustomer}>
       <FormRow label="Full name">
         <Input defaultValue={fullName} name="name" type="text" />
       </FormRow>
@@ -41,7 +39,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
         </Button>
         <SubmitButton pendingLabel="Updating...">Update account</SubmitButton>
       </FormRow>
-    </form>
+    </Form>
   );
 }
 export default UpdateUserDataForm;
