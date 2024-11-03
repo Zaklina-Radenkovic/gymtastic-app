@@ -2,7 +2,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   value?: string;
   disabled?: boolean;
-  onChange?: () => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => void;
   name?: string;
   defaultValue?: string;
   className?: string;
@@ -24,13 +26,15 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <>
-      {(type === 'text' || type === 'password') && (
+      {(type === 'text' || type === 'password' || type === 'email') && (
         <input
           type={type}
           {...otherProps}
           name={name}
           defaultValue={defaultValue}
+          value={value}
           disabled={disabled}
+          onChange={onChange}
           className={`rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2 ${className}`}
         />
       )}
@@ -74,6 +78,8 @@ const Input: React.FC<InputProps> = ({
             {...otherProps}
             name={name}
             defaultValue={defaultValue}
+            value={value}
+            onChange={onChange}
             // disabled={disabled}
             className={`rounded-tiny border border-primary-400 bg-primary-50 px-4 py-2 ${className}`}
           />
