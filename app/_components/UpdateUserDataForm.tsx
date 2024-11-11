@@ -22,7 +22,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
         <Input defaultValue={fullName} name="name" type="text" />
       </FormRow>
       <FormRow label="Email address">
-        <Input type="text" name="email" defaultValue={email} />
+        <Input type="email" name="email" defaultValue={email} />
       </FormRow>
       <input hidden name="id" value={id} readOnly />
       <FormRow label="Avatar image">
