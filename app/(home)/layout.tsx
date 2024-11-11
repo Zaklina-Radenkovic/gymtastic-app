@@ -1,9 +1,9 @@
 import { Inter } from 'next/font/google';
-import Header from './_components/Header';
-import SideNavigation from './_components/SideNavigation';
+import Header from '../_components/Header';
+import SideNavigation from '../_components/SideNavigation';
 import '@/app/_styles/globals.css';
 
-import { ThemeProvider } from './_context/ThemeContext';
+import { ThemeProvider } from '../_context/ThemeContext';
 
 export const metadata = {
   title: {
@@ -49,15 +49,17 @@ export default function RootLayout({
       {/* <DarkModeProvider> */}
       {/* <ThemeProvider initialTheme={initialTheme}> */}
       <ThemeProvider>
-        <body
-          className={`${inter.className} grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] text-primary-800 antialiased transition-colors duration-300`}
-        >
-          <Header />
-          <SideNavigation />
+        <body className={`${inter.className}`}>
+          <div className="grid min-h-screen grid-cols-[18rem,_1fr] grid-rows-[auto,_1fr] text-primary-800 antialiased transition-colors duration-300">
+            <Header />
+            <SideNavigation />
 
-          <main className="bg-primary-100 px-12 pb-16 pt-10">
-            <div className="mx-auto my-0 flex flex-col gap-12">{children}</div>
-          </main>
+            <main className="bg-primary-100 px-12 pb-16 pt-10">
+              <div className="mx-auto my-0 flex flex-col gap-12">
+                {children}
+              </div>
+            </main>
+          </div>
         </body>
       </ThemeProvider>
 

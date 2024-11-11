@@ -1,5 +1,5 @@
-import Form from '../_components/Form';
-import SettingsForm from '../_components/SettingsForm';
+import Form from '../../_components/Form';
+import SettingsForm from '../../_components/SettingsForm';
 
 export const metadata = {
   title: 'Settings',

@@ -1,5 +1,5 @@
-import GeneralUserSettings from '../_components/GeneralUserSettings';
-import ConfirmDelete from '../_components/ConfirmDelete';
+import GeneralUserSettings from '../../_components/GeneralUserSettings';
+import ConfirmDelete from '../../_components/ConfirmDelete';
 
 export const metadata = {
   title: 'Update profile',

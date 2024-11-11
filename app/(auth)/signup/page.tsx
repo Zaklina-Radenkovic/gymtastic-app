@@ -1,5 +1,5 @@
-import Logo from '../_components/Logo';
-import SignupForm from '../_components/SignupForm';
+import Logo from '../../_components/Logo';
+import SignupForm from '../../_components/SignupForm';
 
 export default function Page() {
   return (

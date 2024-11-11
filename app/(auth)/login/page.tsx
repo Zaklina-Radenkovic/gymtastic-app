@@ -1,5 +1,5 @@
-import LoginForm from '../_components/LoginForm';
-import Logo from '../_components/Logo';
+import LoginForm from '../../_components/LoginForm';
+import Logo from '../../_components/Logo';
 
 export default function Page() {
   return (
