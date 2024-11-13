@@ -1,25 +1,31 @@
+'use client';
 import Image from 'next/image';
 import { DocumentData } from 'firebase/firestore';
 import UpdatePasswordForm from './UpdatePasswordForm';
 import UpdateUserDataForm from './UpdateUserDataForm';
 
-function GeneralUserSettings({ user }: DocumentData) {
+import { useSession } from 'next-auth/react';
+
+function GeneralUserSettings() {
+  const { data: session }: any = useSession();
+  const user = session?.user;
+  // console.log(user);
+  if (!user) return null;
   return (
     <>
       <div className="flex items-center gap-5">
-        <Image
-          width="60"
-          height="60"
-          src={user.image || '/default-user.jpg'}
-          alt={`Avatar of ${user.fullName}`}
-          referrerPolicy="no-referrer"
-          className="rounded-full"
-        />
+        <div className="relative h-16 w-16">
+          <Image
+            fill
+            className="rounded-full object-cover"
+            src={user?.image || '/default-user.jpg'}
+            alt={`Avatar of ${user?.name}`}
+            referrerPolicy="no-referrer"
+          />
+        </div>
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-semibold leading-snug">
-            {user.fullName}
-          </h1>
-          <span className="text-primary-600">{user.email}</span>
+          <h1 className="text-3xl font-semibold leading-snug">{user?.name}</h1>
+          <span className="text-primary-600">{user?.email}</span>
         </div>
       </div>
 

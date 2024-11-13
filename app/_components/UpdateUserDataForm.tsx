@@ -14,12 +14,12 @@ interface UpdateUserDataFormProps {
 }
 
 function UpdateUserDataForm({ user }: DocumentData) {
-  const { fullName, image, email, id } = user;
+  const { name, image, email, id } = user;
 
   return (
     <Form action={updateCustomer}>
       <FormRow label="Full name">
-        <Input defaultValue={fullName} name="name" type="text" />
+        <Input defaultValue={name} name="name" type="text" />
       </FormRow>
       <FormRow label="Email address">
         <Input type="email" name="email" defaultValue={email} />

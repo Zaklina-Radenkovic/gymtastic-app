@@ -3,7 +3,7 @@ import SignupForm from '../../_components/SignupForm';
 
 export default function Page() {
   return (
-    <main className="grid min-h-screen grid-cols-[38rem] content-center gap-9 bg-primary-100">
+    <main className="grid min-h-screen grid-cols-[38rem] content-center justify-center gap-9 bg-primary-100">
       <div className="text-center">
         <Logo />
       </div>
