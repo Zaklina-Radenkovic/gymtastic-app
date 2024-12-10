@@ -22,7 +22,8 @@ type User = {
 
 function Navigation() {
   const { data: session }: any = useSession();
-  // console.log(session);
+
+  console.log(session);
   return (
     <nav className="flex">
       <ul className="flex items-center justify-between gap-2">

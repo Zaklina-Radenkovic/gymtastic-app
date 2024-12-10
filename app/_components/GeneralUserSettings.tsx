@@ -1,16 +1,8 @@
-'use client';
 import Image from 'next/image';
-import { DocumentData } from 'firebase/firestore';
 import UpdatePasswordForm from './UpdatePasswordForm';
 import UpdateUserDataForm from './UpdateUserDataForm';
 
-import { useSession } from 'next-auth/react';
-
-function GeneralUserSettings() {
-  const { data: session }: any = useSession();
-  const user = session?.user;
-  // console.log(user);
-  if (!user) return null;
+function GeneralUserSettings({ user }) {
   return (
     <>
       <div className="flex items-center gap-5">

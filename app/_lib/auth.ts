@@ -1,38 +1,74 @@
 import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
+import { FirestoreAdapter } from '@next-auth/firebase-adapter';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { db } from '@/app/_lib/firebase';
+import { getFirestore, collection, addDoc } from 'firebase-admin/firestore';
+import GoogleProvider from 'next-auth/providers/google';
 
-const authConfig = {
+export const authConfig = {
+  adapter: FirestoreAdapter(db),
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    //from firebase AI
+    // CredentialsProvider({
+    //   name: 'Credentials',
+    //   credentials: {
+    //     email: { label: 'Email', type: 'text', placeholder: 'john.doe@example.com' },
+    //     password: { label: 'Password', type: 'password' },
+    //   },
+    //   async authorize(credentials, req) {
+    //     try {
+    //       const { email, password } = credentials;
+    //       const user = await firebaseAuth.signInWithEmailAndPassword(email, password);
+    //       return user;
+    //     } catch (error) {
+    //       console.error('Firebase Authentication Error:', error);
+    //       return null;
+    //     }
+    //   },
+    // }),
+    ////////////
+    // Configure your desired authentication providers
+    // Example: Email/Password
+    // EmailProvider({
+    //   server: process.env.EMAIL_SERVER,
+    //   from: process.env.EMAIL_FROM,
+    // }),
+    // Example: Google Sign-In
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
   callbacks: {
-    authorized({ auth, request }) {
+    async authorized({ auth, request }) {
       return !!auth?.user;
     },
-    //     async signIn({ user, account, profile }) {
-    //       try {
-    //         const existingGuest = await getGuest(user.email);
-
-    //         if (!existingGuest) {
-    //           await createGuest({ email: user.email, fullName: user.name });
-    //         }
-
-    //         return true;
-    //       } catch {
-    //         return false;
-    //       }
-    //     },
-    // async session({ session, user }) {
-    //   const guest = await getGuest(session.user.email);
-    //   session.user.guestId = guest.id;
+    // async session({ session, token, user }) {
+    //   // Add user data to the session object
+    //   session.user.id = user.uid;
+    //   session.user.email = user.email;
+    //   // ... other user data you want to include
     //   return session;
     // },
+    // async signIn({ user, account, profile, isNewUser }) {
+    //   // Create a new user document in Firestore if it's a new user
+    //   if (isNewUser) {
+    //     await addDoc(collection(db, 'users'), {
+    //       uid: user.uid,
+    //       email: user.email,
+    //       fullName: user.name,
+    //       image: user.image,
+    //       role: 'member',
+    //       status: 'inactive',
+    //       // ... other user data
+    //     });
+    //   }
+    //   return true;
     // },
-    //   pages: {
-    //     signIn: '/login',
   },
 };
 

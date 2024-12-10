@@ -4,21 +4,27 @@ import { cookies } from 'next/headers';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../_lib/firebase';
 import { revalidatePath } from 'next/cache';
+import { signIn } from './auth';
 
 import { redirect } from 'next/navigation';
 
 //user sign up
-export async function signUpAction(formData: { get: (arg0: string) => any }) {
-  const email = formData.get('email');
-  const password = formData.get('password');
-  console.log(email, password);
+// export async function signUpAction(formData: { get: (arg0: string) => any }) {
+//   const email = formData.get('email');
+//   const password = formData.get('password');
+//   console.log(email, password);
 
-  // try {
-  //   await SignUp(email, password);
-  // } catch {
-  //   throw new Error('Something went wrong');
-  // }
-  redirect(`/`);
+//   // try {
+//   //   await SignUp(email, password);
+//   // } catch {
+//   //   throw new Error('Something went wrong');
+//   // }
+//   redirect(`/`);
+// }
+
+//user sign in
+export async function signInAction() {
+  await signIn('google', { redirectTo: '/account' });
 }
 
 //updating customer data
