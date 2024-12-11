@@ -1,5 +1,17 @@
-import { getFirestore } from 'firebase-admin/firestore';
 import { db } from './firebase';
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  limit,
+  query,
+  startAfter,
+  orderBy,
+  where,
+  getFirestore,
+  getCountFromServer,
+} from 'firebase/firestore';
 import { error } from 'console';
 import { notFound } from 'next/navigation';
 import { PAGE_SIZE } from '../_utils/constants';
@@ -19,7 +31,7 @@ export const getUsers = async function (
   sortBy: 'fullName' | 'timestamp' = 'fullName',
   sortOrder: 'asc' | 'desc' = 'asc',
 ): Promise<{ usersList: User[]; count: number }> {
-  const collectionRef = db.collection('users');
+  const collectionRef = collection(db, 'users');
   let usersList: User[] = [];
   let count = 0;
 
@@ -28,36 +40,49 @@ export const getUsers = async function (
     //   `Fetching users - Page: ${page}, Term: ${term}, SortBy: ${sortBy}, SortOrder: ${sortOrder}`,
     // );
 
-    let baseQuery = collectionRef
-      .orderBy(sortBy, sortOrder)
+    let baseQuery = query(
+      collectionRef,
+      orderBy(sortBy, sortOrder),
       // Secondary orderBy to avoid conflicts when items have the same value in sortBy
-      .orderBy(sortBy === 'fullName' ? 'timestamp' : 'fullName', 'asc');
+      orderBy(sortBy === 'fullName' ? 'timestamp' : 'fullName', 'asc'),
+    );
+
     // Add filtering constraints if a search term is provided
     if (term) {
       const formattedTerm = term.charAt(0).toUpperCase() + term.slice(1);
 
-      let upperCaseQuery = baseQuery
-        .where('fullName', '>=', formattedTerm)
-        .where('fullName', '<=', formattedTerm + '\uf8ff');
-      let lowerCaseQuery = baseQuery
-        .where('fullName', '>=', term.toLowerCase())
-        .where('fullName', '<=', term.toLowerCase() + '\uf8ff');
+      let upperCaseQuery = query(
+        baseQuery,
+        where('fullName', '>=', formattedTerm),
+        where('fullName', '<=', formattedTerm + '\uf8ff'),
+      );
+
+      let lowerCaseQuery = query(
+        baseQuery,
+        where('fullName', '>=', term.toLowerCase()),
+        where('fullName', '<=', term.toLowerCase() + '\uf8ff'),
+      );
+
       // Fetch counts for both queries
       const [upperCaseCountSnapshot, lowerCaseCountSnapshot] =
-        await Promise.all([upperCaseQuery.get(), lowerCaseQuery.get()]);
+        await Promise.all([
+          getCountFromServer(upperCaseQuery),
+          getCountFromServer(lowerCaseQuery),
+        ]);
 
-      const upperCaseCount = upperCaseCountSnapshot.size;
-      const lowerCaseCount = lowerCaseCountSnapshot.size;
+      const upperCaseCount = upperCaseCountSnapshot.data().count;
+      const lowerCaseCount = lowerCaseCountSnapshot.data().count;
 
       count = upperCaseCount + lowerCaseCount;
 
       if (page > 1) {
-        const prevUpperSnapshot = await upperCaseQuery
-          .limit((page - 1) * PAGE_SIZE)
-          .get();
-        const prevLowerSnapshot = await lowerCaseQuery
-          .limit((page - 1) * PAGE_SIZE)
-          .get();
+        const prevUpperSnapshot = await getDocs(
+          query(upperCaseQuery, limit((page - 1) * PAGE_SIZE)),
+        );
+        const prevLowerSnapshot = await getDocs(
+          query(lowerCaseQuery, limit((page - 1) * PAGE_SIZE)),
+        );
+
         const lastUpperVisible =
           prevUpperSnapshot.docs[prevUpperSnapshot.docs.length - 1];
         const lastLowerVisible =
@@ -71,31 +96,35 @@ export const getUsers = async function (
           //   startAfter(lastUpperUserData.fullName, lastUpperUserData.timestamp),
           //   limit(PAGE_SIZE),
           // );
-          upperCaseQuery = upperCaseQuery
-            .startAfter(
+          upperCaseQuery = query(
+            upperCaseQuery,
+            startAfter(
               sortBy === 'fullName'
                 ? lastUpperUserData.fullName
                 : lastUpperUserData.timestamp,
               sortBy === 'timestamp'
                 ? lastUpperUserData.timestamp
                 : lastUpperUserData.fullName,
-            )
-            .limit(PAGE_SIZE);
+            ),
+            limit(PAGE_SIZE),
+          );
         }
 
         if (lastLowerVisible) {
           const lastLowerUserData = lastLowerVisible.data();
 
-          lowerCaseQuery = lowerCaseQuery
-            .startAfter(
+          lowerCaseQuery = query(
+            lowerCaseQuery,
+            startAfter(
               sortBy === 'fullName'
                 ? lastLowerUserData.fullName
                 : lastLowerUserData.timestamp,
               sortBy === 'timestamp'
                 ? lastLowerUserData.timestamp
                 : lastLowerUserData.fullName,
-            )
-            .limit(PAGE_SIZE);
+            ),
+            limit(PAGE_SIZE),
+          );
 
           // lowerCaseQuery = query(
           //   lowerCaseQuery,
@@ -104,14 +133,14 @@ export const getUsers = async function (
           // );
         }
       } else {
-        upperCaseQuery = upperCaseQuery.limit(PAGE_SIZE);
-        lowerCaseQuery = lowerCaseQuery.limit(PAGE_SIZE);
+        upperCaseQuery = query(upperCaseQuery, limit(PAGE_SIZE));
+        lowerCaseQuery = query(lowerCaseQuery, limit(PAGE_SIZE));
       }
 
       // Merge results from both queries
       const [upperCaseSnapshot, lowerCaseSnapshot] = await Promise.all([
-        upperCaseQuery.get(),
-        lowerCaseQuery.get(),
+        getDocs(upperCaseQuery),
+        getDocs(lowerCaseQuery),
       ]);
 
       const upperCaseList: User[] = upperCaseSnapshot.docs.map((doc) => ({
@@ -132,36 +161,41 @@ export const getUsers = async function (
       usersList = Object.values(uniqueUsers);
     } else {
       // Count query without filters
-      const countSnapshot = await collectionRef.get();
-      count = countSnapshot.size;
+      const countSnapshot = await getCountFromServer(query(collectionRef));
+      count = countSnapshot.data().count;
       // Fetch documents
-      baseQuery = baseQuery.limit(PAGE_SIZE);
+      baseQuery = query(baseQuery, limit(PAGE_SIZE));
       if (page > 1) {
         // Fetch documents up to the previous page to determine the start point
-        const prevSnapshot = await collectionRef
-          .orderBy(sortBy, sortOrder)
-          .limit((page - 1) * PAGE_SIZE)
-          .get();
-
+        const prevSnapshot = await getDocs(
+          query(
+            collectionRef,
+            orderBy(sortBy, sortOrder),
+            limit((page - 1) * PAGE_SIZE),
+          ),
+        );
         const lastVisible = prevSnapshot.docs[prevSnapshot.docs.length - 1];
 
         if (lastVisible) {
           const lastUserData = lastVisible.data();
 
           if (sortBy === 'fullName') {
-            baseQuery = baseQuery
-              .startAfter(lastUserData.fullName, lastUserData.timestamp)
-              .limit(PAGE_SIZE);
+            baseQuery = query(
+              baseQuery,
+              startAfter(lastUserData.fullName, lastUserData.timestamp),
+              limit(PAGE_SIZE),
+            );
           } else {
-            baseQuery = baseQuery
-              .startAfter(lastUserData.timestamp, lastUserData.fullName)
-              .limit(PAGE_SIZE);
+            baseQuery = query(
+              baseQuery,
+              startAfter(lastUserData.timestamp, lastUserData.fullName),
+              limit(PAGE_SIZE),
+            );
           }
         }
       }
 
-      const usersCollectionSnapshot = await baseQuery.get();
-
+      const usersCollectionSnapshot = await getDocs(baseQuery);
       usersList = usersCollectionSnapshot.docs.map((doc) => ({
         ...(doc.data() as User),
         id: doc.id,
@@ -179,19 +213,13 @@ export const getUsers = async function (
 // GET USER/////
 
 export const getUser = async function (id: string) {
-  try {
-    // Get the document reference
-    const docSnap = await db.collection('users').doc(id).get();
+  const docRef = doc(db, 'users', id);
+  const docSnap = await getDoc(docRef);
 
-    // Check if the document exists
-    if (docSnap.exists) {
-      return docSnap.data();
-    } else {
-      console.error(`User with ID ${id} not found.`);
-      notFound();
-    }
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    throw new Error('Failed to fetch user');
+  if (docSnap.exists()) return docSnap.data();
+
+  if (error) {
+    console.error(error);
+    notFound();
   }
 };
