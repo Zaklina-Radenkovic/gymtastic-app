@@ -1,6 +1,4 @@
-import { getFirestore } from 'firebase-admin/firestore';
 import { db } from './firebase';
-import { error } from 'console';
 import { notFound } from 'next/navigation';
 import { PAGE_SIZE } from '../_utils/constants';
 
@@ -24,15 +22,11 @@ export const getUsers = async function (
   let count = 0;
 
   try {
-    // console.log(
-    //   `Fetching users - Page: ${page}, Term: ${term}, SortBy: ${sortBy}, SortOrder: ${sortOrder}`,
-    // );
-
     let baseQuery = collectionRef
       .orderBy(sortBy, sortOrder)
       // Secondary orderBy to avoid conflicts when items have the same value in sortBy
       .orderBy(sortBy === 'fullName' ? 'timestamp' : 'fullName', 'asc');
-    // Add filtering constraints if a search term is provided
+    // Adding filtering constraints if a search term is provided
     if (term) {
       const formattedTerm = term.charAt(0).toUpperCase() + term.slice(1);
 
@@ -42,7 +36,8 @@ export const getUsers = async function (
       let lowerCaseQuery = baseQuery
         .where('fullName', '>=', term.toLowerCase())
         .where('fullName', '<=', term.toLowerCase() + '\uf8ff');
-      // Fetch counts for both queries
+
+      // Fetching counts for both queries
       const [upperCaseCountSnapshot, lowerCaseCountSnapshot] =
         await Promise.all([upperCaseQuery.get(), lowerCaseQuery.get()]);
 
@@ -96,19 +91,13 @@ export const getUsers = async function (
                 : lastLowerUserData.fullName,
             )
             .limit(PAGE_SIZE);
-
-          // lowerCaseQuery = query(
-          //   lowerCaseQuery,
-          //   startAfter(lastLowerUserData.fullName, lastLowerUserData.timestamp),
-          //   limit(PAGE_SIZE),
-          // );
         }
       } else {
         upperCaseQuery = upperCaseQuery.limit(PAGE_SIZE);
         lowerCaseQuery = lowerCaseQuery.limit(PAGE_SIZE);
       }
 
-      // Merge results from both queries
+      // Merging results from both queries
       const [upperCaseSnapshot, lowerCaseSnapshot] = await Promise.all([
         upperCaseQuery.get(),
         lowerCaseQuery.get(),
@@ -131,13 +120,14 @@ export const getUsers = async function (
 
       usersList = Object.values(uniqueUsers);
     } else {
-      // Count query without filters
+      // Counting query without filters
       const countSnapshot = await collectionRef.get();
       count = countSnapshot.size;
-      // Fetch documents
+
+      // Fetching documents
       baseQuery = baseQuery.limit(PAGE_SIZE);
       if (page > 1) {
-        // Fetch documents up to the previous page to determine the start point
+        // Fetching documents up to the previous page to determine the start point
         const prevSnapshot = await collectionRef
           .orderBy(sortBy, sortOrder)
           .limit((page - 1) * PAGE_SIZE)
@@ -180,10 +170,8 @@ export const getUsers = async function (
 
 export const getUser = async function (id: string) {
   try {
-    // Get the document reference
     const docSnap = await db.collection('users').doc(id).get();
 
-    // Check if the document exists
     if (docSnap.exists) {
       return docSnap.data();
     } else {
@@ -193,5 +181,20 @@ export const getUser = async function (id: string) {
   } catch (error) {
     console.error('Error fetching user:', error);
     throw new Error('Failed to fetch user');
+  }
+};
+
+//// CREATE USER /////
+export const createUser = async function (userId: string, userData: {}) {
+  try {
+    const userRef = db.collection('users').doc(userId);
+
+    await userRef.set(userData);
+
+    console.log(`User document created for ID: ${userId}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error creating user document:', error);
+    throw new Error('Failed to create user document');
   }
 };
