@@ -1,16 +1,12 @@
 import NextAuth from 'next-auth';
+import { NextAuthConfig } from 'next-auth';
 import { FirestoreAdapter } from '@next-auth/firebase-adapter';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { db } from '@/app/_lib/firebase';
-import { getFirestore, collection, addDoc } from 'firebase-admin/firestore';
 import GoogleProvider from 'next-auth/providers/google';
 
-export const authConfig = {
-  adapter: FirestoreAdapter(db),
+import { db } from '@/app/_lib/firebase';
+
+export const authConfig: NextAuthConfig = {
+  // adapter: FirestoreAdapter(db),
   providers: [
     //from firebase AI
     // CredentialsProvider({
@@ -44,31 +40,64 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    async authorized({ auth, request }) {
-      return !!auth?.user;
+    async signIn({ user, account, profile }) {
+      if (!user.id) {
+        return false;
+      }
+
+      const userRef = db.collection('users').doc(user.id);
+      try {
+        await userRef.set(
+          {
+            id: user.id,
+            role: 'member',
+            status: 'inactive',
+            email: user.email,
+            fullName: user.name || profile?.name,
+            image: user.image || profile?.picture,
+            timestamp: new Date().toISOString(),
+          },
+          { merge: true },
+        );
+
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
-    // async session({ session, token, user }) {
-    //   // Add user data to the session object
-    //   session.user.id = user.uid;
-    //   session.user.email = user.email;
-    //   // ... other user data you want to include
-    //   return session;
-    // },
-    // async signIn({ user, account, profile, isNewUser }) {
-    //   // Create a new user document in Firestore if it's a new user
-    //   if (isNewUser) {
-    //     await addDoc(collection(db, 'users'), {
-    //       uid: user.uid,
-    //       email: user.email,
-    //       fullName: user.name,
-    //       image: user.image,
-    //       role: 'member',
-    //       status: 'inactive',
-    //       // ... other user data
-    //     });
-    //   }
-    //   return true;
-    // },
+    async jwt({ token, user }) {
+      // Adding user.id to the token during initial sign-in
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      console.log('Session callback triggered:', session);
+      try {
+        //@ts-ignore
+        const userRef = db.collection('users').doc(token.id);
+        const userDoc = await userRef.get();
+
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          session.user = {
+            ...session.user,
+            //@ts-ignore
+            id: token.id,
+            fullName: userData?.fullName || userData?.name,
+            email: userData?.email,
+            timestamp: userData?.timestamp,
+          };
+        } else {
+          console.error('User document does not exist.');
+        }
+      } catch (error) {
+        console.error('Error fetching updated user data:', error);
+      }
+
+      return session;
+    },
   },
 };
 
