@@ -1,6 +1,13 @@
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '../_context/ThemeContext';
 import '@/app/_styles/globals.css';
+
+export const metadata = {
+  title: 'Login | Gymtastic App',
+
+  // description: 'Sports scheduling app',
+};
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',

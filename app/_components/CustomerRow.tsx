@@ -27,8 +27,12 @@ function CustomerRow({
       </div>
       <div className="font-medium">{role}</div>
       <div className="font-medium">{status}</div>
-      <div className="font-medium">{convertTimestamp(memberSince)}</div>
-      <div className="font-medium">{convertTimestamp(expirationDate)}</div>
+      <div className="font-medium">
+        {memberSince ? convertTimestamp(memberSince) : `-`}
+      </div>
+      <div className="font-medium">
+        {expirationDate ? convertTimestamp(expirationDate) : `-`}
+      </div>
       <div className="font-medium">{trainings}</div>
 
       <div className="flex flex-col justify-center gap-1 text-primary-600">

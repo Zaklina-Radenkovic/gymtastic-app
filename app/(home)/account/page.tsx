@@ -10,19 +10,8 @@ export const metadata = {
 };
 
 export default async function Page() {
-  //TODO: Getting user from auth.session
-  // const { data: session, status } = useSession();
-
-  // if (status === 'loading') {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (status === 'unauthenticated') {
-  //   return <div>Please sign in to view your account.</div>;
-  // }
-
   const session = await auth();
-  console.log('this is session ', session);
+
   if (!session) {
     redirect('/sign-in'); // Redirect unauthorized users
   }

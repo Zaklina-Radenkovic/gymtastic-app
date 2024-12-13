@@ -1,3 +1,4 @@
+import Form from './Form';
 import FormRow from './FormRow';
 import Input from './Input';
 import Button from './Button';
@@ -6,7 +7,6 @@ import SubmitButton from './SubmitButton';
 import { DocumentData } from 'firebase/firestore';
 
 import { updateCustomer } from '../_lib/actions';
-import Form from './Form';
 
 interface UpdateUserDataFormProps {
   user: DocumentData;
@@ -14,12 +14,12 @@ interface UpdateUserDataFormProps {
 }
 
 function UpdateUserDataForm({ user }: DocumentData) {
-  const { name, image, email, id } = user;
+  const { fullName, image, email, id } = user;
 
   return (
     <Form action={updateCustomer}>
       <FormRow label="Full name">
-        <Input defaultValue={name} name="name" type="text" />
+        <Input defaultValue={fullName} name="name" type="text" />
       </FormRow>
       <FormRow label="Email address">
         <Input type="email" name="email" defaultValue={email} />
