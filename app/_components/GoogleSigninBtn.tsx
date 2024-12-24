@@ -1,8 +1,8 @@
-import { signInAction } from '../_lib/actions';
+import { signInWithGoogle } from '../_lib/actions';
 
 export default function GoogleSigninBtn() {
   return (
-    <form action={signInAction}>
+    <form action={signInWithGoogle}>
       <button className="flex items-center gap-6 justify-self-center border border-primary-300 px-10 py-4 text-lg font-medium">
         <img
           src="https://authjs.dev/img/providers/google.svg"

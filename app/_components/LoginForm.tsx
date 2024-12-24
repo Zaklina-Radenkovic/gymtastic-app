@@ -4,18 +4,17 @@ import FormRowVertical from './FormRowVertical';
 import Button from './Button';
 
 import { signInAction } from '@/app/_lib/actions';
-import GoogleSigninBtn from './GoogleSigninBtn';
 
 function LoginForm() {
   return (
     <>
-      <Form action="">
+      <Form action={signInAction}>
         <FormRowVertical label="Email address">
-          <Input type="email" />
+          <Input type="email" name="email" />
         </FormRowVertical>
 
         <FormRowVertical label="Password">
-          <Input type="password" />
+          <Input type="password" name="password" />
         </FormRowVertical>
 
         <FormRowVertical>
