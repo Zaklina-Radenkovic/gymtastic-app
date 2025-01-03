@@ -29,6 +29,7 @@ export default function RootLayout({
   // const initialTheme = cookieStore.get('theme')?.value || 'light';
 
   // console.log('initialTheme ', initialTheme);
+
   return (
     <html
       lang="en"
