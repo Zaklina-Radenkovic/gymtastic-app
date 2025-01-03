@@ -11,6 +11,8 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@next-auth/firebase-adapter": "^2.0.1",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.7",
