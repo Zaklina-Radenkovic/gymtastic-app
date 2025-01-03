@@ -1,19 +1,34 @@
 // next-auth.d.ts
 
-import NextAuth from 'next-auth';
+import NextAuth, { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
-  interface Session {
+  interface Session extends DefaultUser {
+    firebaseToken?: string;
     user: {
       id: string;
+      fullName: string;
       email: string;
-      // Add other properties you need
+      image?: string | null;
+      timestamp: Date | null;
+      passwordHash: string;
     };
+  }
+
+  interface JWT {
+    id: string;
+    email: string;
+    fullName: string;
+    image?: string | null;
+    timestamp: Date | null;
+    passwordHash: string;
   }
 
   interface User {
     uid: string;
     email: string;
-    // Add other properties you need
+    fullName: string;
+    timestamp: Date | null;
+    passwordHash: string;
   }
 }

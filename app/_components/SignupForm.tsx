@@ -1,11 +1,9 @@
-'use client';
-
-import { useState } from 'react';
 import Form from './Form';
 import FormRow from './FormRow';
 import Input from './Input';
 import Button from './Button';
 import SubmitButton from './SubmitButton';
+
 import { signUpAction } from '../_lib/actions';
 
 function SignupForm() {
@@ -16,19 +14,11 @@ function SignupForm() {
       </FormRow>
 
       <FormRow label="Email address">
-        <Input
-          type="email"
-          name="email"
-          // value={email}
-        />
+        <Input type="email" name="email" />
       </FormRow>
 
       <FormRow label="Password (min 8 characters)">
-        <Input
-          type="password"
-          name="password"
-          // value={password}
-        />
+        <Input type="password" name="password" />
       </FormRow>
 
       <FormRow label="Repeat password">
@@ -37,8 +27,7 @@ function SignupForm() {
 
       <FormRow>
         <Button variation="secondary">Cancel</Button>
-        {/* <Button size="large">Login</Button> */}
-        <SubmitButton>Sign up</SubmitButton>
+        <SubmitButton pendingLabel="Signing up...">Sign up</SubmitButton>
       </FormRow>
     </Form>
   );
