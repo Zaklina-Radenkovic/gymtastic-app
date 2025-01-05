@@ -4,17 +4,17 @@ import { PAGE_SIZE } from '../_utils/constants';
 
 interface User {
   timestamp(
-    fullName: unknown,
+    name: unknown,
     timestamp: Date,
   ): import('@firebase/firestore').QueryConstraint;
-  fullName: unknown;
+  name: unknown;
   id: string;
 }
 
 export const getUsers = async function (
   page = 1,
   term?: string,
-  sortBy: 'fullName' | 'timestamp' = 'fullName',
+  sortBy: 'name' | 'timestamp' = 'name',
   sortOrder: 'asc' | 'desc' = 'asc',
 ): Promise<{ usersList: User[]; count: number }> {
   const collectionRef = db.collection('users');
@@ -25,17 +25,18 @@ export const getUsers = async function (
     let baseQuery = collectionRef
       .orderBy(sortBy, sortOrder)
       // Secondary orderBy to avoid conflicts when items have the same value in sortBy
-      .orderBy(sortBy === 'fullName' ? 'timestamp' : 'fullName', 'asc');
+
+      .orderBy(sortBy === 'name' ? 'timestamp' : 'name', 'asc');
     // Adding filtering constraints if a search term is provided
     if (term) {
       const formattedTerm = term.charAt(0).toUpperCase() + term.slice(1);
 
       let upperCaseQuery = baseQuery
-        .where('fullName', '>=', formattedTerm)
-        .where('fullName', '<=', formattedTerm + '\uf8ff');
+        .where('name', '>=', formattedTerm)
+        .where('name', '<=', formattedTerm + '\uf8ff');
       let lowerCaseQuery = baseQuery
-        .where('fullName', '>=', term.toLowerCase())
-        .where('fullName', '<=', term.toLowerCase() + '\uf8ff');
+        .where('name', '>=', term.toLowerCase())
+        .where('name', '<=', term.toLowerCase() + '\uf8ff');
 
       // Fetching counts for both queries
       const [upperCaseCountSnapshot, lowerCaseCountSnapshot] =
@@ -63,17 +64,17 @@ export const getUsers = async function (
           //TODO: Check paginating users with term ('j')
           // upperCaseQuery = query(
           //   upperCaseQuery,
-          //   startAfter(lastUpperUserData.fullName, lastUpperUserData.timestamp),
+          //   startAfter(lastUpperUserData.name, lastUpperUserData.timestamp),
           //   limit(PAGE_SIZE),
           // );
           upperCaseQuery = upperCaseQuery
             .startAfter(
-              sortBy === 'fullName'
-                ? lastUpperUserData.fullName
+              sortBy === 'name'
+                ? lastUpperUserData.name
                 : lastUpperUserData.timestamp,
               sortBy === 'timestamp'
                 ? lastUpperUserData.timestamp
-                : lastUpperUserData.fullName,
+                : lastUpperUserData.name,
             )
             .limit(PAGE_SIZE);
         }
@@ -83,12 +84,12 @@ export const getUsers = async function (
 
           lowerCaseQuery = lowerCaseQuery
             .startAfter(
-              sortBy === 'fullName'
-                ? lastLowerUserData.fullName
+              sortBy === 'name'
+                ? lastLowerUserData.name
                 : lastLowerUserData.timestamp,
               sortBy === 'timestamp'
                 ? lastLowerUserData.timestamp
-                : lastLowerUserData.fullName,
+                : lastLowerUserData.name,
             )
             .limit(PAGE_SIZE);
         }
@@ -138,13 +139,13 @@ export const getUsers = async function (
         if (lastVisible) {
           const lastUserData = lastVisible.data();
 
-          if (sortBy === 'fullName') {
+          if (sortBy === 'name') {
             baseQuery = baseQuery
-              .startAfter(lastUserData.fullName, lastUserData.timestamp)
+              .startAfter(lastUserData.name, lastUserData.timestamp)
               .limit(PAGE_SIZE);
           } else {
             baseQuery = baseQuery
-              .startAfter(lastUserData.timestamp, lastUserData.fullName)
+              .startAfter(lastUserData.timestamp, lastUserData.name)
               .limit(PAGE_SIZE);
           }
         }

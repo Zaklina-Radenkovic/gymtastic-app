@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { db, auth } from '../_lib/firebase';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from './auth';
+import { signIn, signOut } from './auth';
 
 import { AuthError } from 'next-auth';
 import { NextResponse } from 'next/server';
@@ -61,15 +61,6 @@ export async function signUpAction(formData: {
       redirectTo: '/',
     });
   } catch (error) {
-    // let errorMessage = '';
-    // if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
-    //   redirect('/');
-    // } else if (error instanceof AuthError) {
-    //   errorMessage = error.message;
-    // } else {
-    //   errorMessage = (error as any).message;
-    // }
-
     //console.error('Error creating new user:', error);
     throw new Error('Failed to create a new user. Please try again.');
   } finally {
@@ -188,3 +179,7 @@ export async function setThemeCookies(theme: string) {
 //   await batch.commit();
 //   console.log('done');
 // };
+
+export async function signOutAction() {
+  await signOut({ redirectTo: '/' });
+}

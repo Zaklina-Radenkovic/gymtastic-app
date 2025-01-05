@@ -8,6 +8,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { db, auth as firebaseAuth } from '@/app/_lib/firebase';
 import { User } from 'next-auth';
+import { AdapterSession, AdapterUser } from 'next-auth/adapters';
+import { JWT } from 'next-auth/jwt';
 
 export const authConfig: NextAuthConfig = {
   adapter: FirestoreAdapter(db),
@@ -74,7 +76,7 @@ export const authConfig: NextAuthConfig = {
             name: userData.name || userData.fullName || null,
             image: userData.photoURL || null,
             uid: userData.uid,
-            fullName: userData.fullName || userData.name || null,
+            //fullName: userData.fullName || userData.name || null,
             timestamp: userData.timestamp || new Date().toISOString(),
             passwordHash: userData.passwordHash,
           };
@@ -202,19 +204,18 @@ export const authConfig: NextAuthConfig = {
     // },
 
     async jwt({ token, user }) {
-      // console.log('JWT callback:', token);
+      console.log('JWT callback:', token);
       console.log('User in JWT callback:', user);
       // Adding user.id to the token during initial sign-in
       if (user) {
         token.id = user.id as string;
 
         token.email = user.email;
-        token.name = user.name || user.fullName || 'Unknown User';
+        token.name = user?.name || 'Unknown User';
 
         token.image = user.image || null;
       }
 
-      //console.log('JWT callback:', token);
       return token;
     },
 
@@ -222,11 +223,10 @@ export const authConfig: NextAuthConfig = {
       //console.log('Session before modification:', session);
 
       if (token) {
-        //@ts-ignore
         session.user = {
-          //...session.user,
+          ...session.user,
           id: token.id as string,
-          name: token.name ? String(token.name || 'Unknown User') : null,
+          name: token.name ? String(token.name) : 'Unknown User',
           email: token.email || session.user.email || '',
           image: token.image ? String(token.image) : null,
           timestamp: new Date() ?? null,
@@ -235,13 +235,12 @@ export const authConfig: NextAuthConfig = {
 
       try {
         if (token?.id) {
-          //@ts-ignore
-          const userRef = db.collection('users').doc(token.id);
+          const userRef = db.collection('users').doc(token.id as string);
           const userDoc = await userRef.get();
 
           if (userDoc.exists) {
             const userData = userDoc.data();
-            //@ts-ignore
+
             session.user = {
               ...session.user,
 
@@ -260,6 +259,24 @@ export const authConfig: NextAuthConfig = {
       }
       console.log('Session after modification:', session);
       return session;
+    },
+  },
+
+  events: {
+    async signOut(message) {
+      const token = 'token' in message ? message.token : null;
+      console.log('User signed out:', token);
+
+      if (token && token.sub) {
+        try {
+          await firebaseAuth.revokeRefreshTokens(token.sub);
+          console.log(
+            `Refresh tokens for user ${token.sub} have been revoked.`,
+          );
+        } catch (error) {
+          console.error('Error revoking refresh tokens:', error);
+        }
+      }
     },
   },
 
