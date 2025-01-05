@@ -21,13 +21,14 @@ export default async function Page({
 }) {
   const currentPage = Number(searchParams?.page) || 1;
   const term = searchParams?.query || '';
-  const sortBy = searchParams?.sortBy || 'fullName-asc';
+  // const sortBy = searchParams?.sortBy || 'fullName-asc';
+  const sortBy = searchParams?.sortBy || 'name-asc';
   const [sortField, sortOrder] = sortBy.split('-');
 
   const { usersList, count } = await getUsers(
     currentPage,
     term,
-    sortField as 'fullName' | 'timestamp',
+    sortField as 'name' | 'timestamp',
     sortOrder as 'asc' | 'desc',
   );
 

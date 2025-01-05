@@ -8,23 +8,18 @@ import { DocumentData } from 'firebase/firestore';
 
 import { updateCustomer } from '../_lib/actions';
 
-interface UpdateUserDataFormProps {
-  user: DocumentData;
-  id: string;
-}
-
 function UpdateUserDataForm({ user }: DocumentData) {
-  const { fullName, image, email, id } = user;
+  const { name, image, email, id } = user;
 
   return (
     <Form action={updateCustomer}>
       <FormRow label="Full name">
-        <Input defaultValue={fullName} name="name" type="text" />
+        <Input defaultValue={user.name} name="name" type="text" />
       </FormRow>
       <FormRow label="Email address">
-        <Input type="email" name="email" defaultValue={email} />
+        <Input type="email" name="email" defaultValue={user.email} />
       </FormRow>
-      <input hidden name="id" value={id} readOnly />
+      <input hidden name="id" value={user.id} readOnly />
       <FormRow label="Avatar image">
         <Input
           type="file"

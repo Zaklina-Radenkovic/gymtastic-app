@@ -6,7 +6,7 @@ import convertTimestamp from '../_utils/helpers';
 
 function CustomerRow({
   customer: {
-    fullName,
+    name,
     email,
     status,
     id: customerId,
@@ -22,7 +22,7 @@ function CustomerRow({
     <Table.Row>
       <div>p </div>
       <div className="flex flex-col gap-1">
-        <span className="font-medium">{fullName}</span>
+        <span className="font-medium">{name}</span>
         <span className="text-xs text-primary-600">{email}</span>
       </div>
       <div className="font-medium">{role}</div>

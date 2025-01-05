@@ -4,11 +4,11 @@ import Select from './Select';
 
 const sortOptions = [
   {
-    value: 'fullName-asc',
+    value: 'name-asc',
     label: 'Sort by name (A-Z)',
   },
   {
-    value: 'fullName-desc',
+    value: 'name-desc',
     label: 'Sort by name (Z-A)',
   },
   {
