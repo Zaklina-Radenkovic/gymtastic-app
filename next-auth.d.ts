@@ -7,7 +7,7 @@ declare module 'next-auth' {
     firebaseToken?: string;
     user: {
       id: string;
-      fullName: string;
+      name: string;
       email: string;
       image?: string | null;
       timestamp: Date | null;
@@ -18,7 +18,7 @@ declare module 'next-auth' {
   interface JWT {
     id: string;
     email: string;
-    fullName: string;
+    name: string;
     image?: string | null;
     timestamp: Date | null;
     passwordHash: string;
@@ -27,7 +27,7 @@ declare module 'next-auth' {
   interface User {
     uid: string;
     email: string;
-    fullName: string;
+    name: string;
     timestamp: Date | null;
     passwordHash: string;
   }

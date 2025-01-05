@@ -24,9 +24,9 @@ export type Customer = {
   id: string;
   // avatar: string;
   email: string;
-  fullName: string;
-  expirationDate: Timestamp;
-  memberSince: Timestamp;
+  name: string;
+  expirationDate: { _seconds: number; _nanoseconds: number };
+  memberSince: { _seconds: number; _nanoseconds: number };
   role: string;
   status: string;
   timestamp: Timestamp;
