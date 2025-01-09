@@ -94,36 +94,36 @@ export const authConfig: NextAuthConfig = {
   ],
 
   callbacks: {
-    // async signIn({ user, account, profile, credentials  }) {
-    //   // console.log('User:', user);
-    //   // console.log('Profile:', profile);
-    //   if (!user.id) {
-    //     return false;
-    //   }
-    //   if (account?.provider === 'google') {
-    //     try {
-    //       const userRef = db.collection('users').doc(user.id);
-    //       await userRef.set(
-    //         {
-    //           id: user.id,
-    //           role: 'member',
-    //           email: user.email,
-    //           name: user.name || profile?.name,
-    //           image: user.image || profile?.picture,
-    //           timestamp: new Date().toISOString(),
-    //         },
-    //         { merge: true },
-    //       );
+    async signIn({ user, account, profile, credentials }) {
+      // console.log('User:', user);
+      // console.log('Profile:', profile);
+      if (!user.id) {
+        return false;
+      }
+      if (account?.provider === 'google') {
+        try {
+          const userRef = db.collection('users').doc(user.id);
+          await userRef.set(
+            {
+              id: user.id,
+              role: 'member',
+              email: user.email,
+              name: user.name || profile?.name,
+              image: user.image || profile?.picture,
+              timestamp: new Date().toISOString(),
+            },
+            { merge: true },
+          );
 
-    //       return true;
-    //     } catch (error) {
-    //       console.error('Error during Google sign-in with Firebase:', error);
-    //       return false;
-    //     }
-    //   }
+          return true;
+        } catch (error) {
+          console.error('Error during Google sign-in with Firebase:', error);
+          return false;
+        }
+      }
 
-    //   return true;
-    // },
+      return true;
+    },
 
     // async signIn({ user, account, profile, credentials }) {
     //   console.log('CREDENTIALS IN SIGNIN CALLBACK ', credentials);
