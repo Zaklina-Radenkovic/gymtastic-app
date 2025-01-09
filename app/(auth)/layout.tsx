@@ -1,6 +1,10 @@
 import { Inter } from 'next/font/google';
+import { redirect } from 'next/navigation';
+
 import { ThemeProvider } from '../_context/ThemeContext';
 import '@/app/_styles/globals.css';
+
+import { auth } from '@/app/_lib/auth';
 
 export const metadata = {
   title: 'Login | Gymtastic App',
@@ -13,11 +17,17 @@ const inter = Inter({
   display: 'swap',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  //temporary
+  // if (session) {
+  //   redirect('/');
+  // }
+
   return (
     <html lang="en">
       <ThemeProvider>

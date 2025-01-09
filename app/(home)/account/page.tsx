@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 import GeneralUserSettings from '../../_components/GeneralUserSettings';
 import ConfirmDelete from '../../_components/ConfirmDelete';
 
@@ -11,10 +9,6 @@ export const metadata = {
 
 export default async function Page() {
   const session = await auth();
-
-  if (!session) {
-    redirect('/sign-in'); // Redirect unauthorized users
-  }
 
   return (
     <>

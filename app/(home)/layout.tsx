@@ -1,10 +1,13 @@
 import { Inter } from 'next/font/google';
+import { redirect } from 'next/navigation';
 import Header from '../_components/Header';
 import SideNavigation from '../_components/SideNavigation';
 import '@/app/_styles/globals.css';
 
 import { ThemeProvider } from '../_context/ThemeContext';
 import { AuthProvider } from '../_context/AuthProvider';
+
+import { auth } from '@/app/_lib/auth';
 
 export const metadata = {
   title: {
@@ -19,7 +22,7 @@ const inter = Inter({
   display: 'swap',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -29,6 +32,12 @@ export default function RootLayout({
   // const initialTheme = cookieStore.get('theme')?.value || 'light';
 
   // console.log('initialTheme ', initialTheme);
+
+  const session = await auth();
+
+  if (!session) {
+    redirect('/sign-in');
+  }
 
   return (
     <html
