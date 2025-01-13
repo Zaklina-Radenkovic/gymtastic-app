@@ -1,6 +1,6 @@
 type FormProps = {
   children: React.ReactNode;
-  action?: (args: any) => Promise<void>;
+  action?: () => void;
   className?: string;
 };
 

@@ -1,46 +1,48 @@
 'use server';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
+
 import { db, auth } from '../_lib/firebase';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn, signOut } from './auth';
 
+import { signInSchema, signUpSchema } from '@/app/_utils/schemas/authSchema';
 import { AuthError } from 'next-auth';
-import { NextResponse } from 'next/server';
+
+interface AuthResponse {
+  success: boolean;
+  errors?: Record<string, string[] | undefined>;
+  error?: string;
+}
 
 //user sign up
-export async function signUpAction(formData: {
-  get: (arg0: string) => any;
-}): Promise<void> {
-  const displayName = formData.get('name');
-  const email = formData.get('email');
-  const password = formData.get('password');
-  console.log(email, password, displayName);
+export async function signUpAction(
+  formState: AuthResponse,
+  formData: { get: (arg0: string) => any },
+): Promise<AuthResponse> {
+  const data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+    repeatPassword: formData.get('repeatPassword'),
+  };
 
-  if (!email || !password || !displayName) {
-    throw new Error('Email, password, and name are required.');
-  }
+  const result = signUpSchema.safeParse(data);
 
-  if (
-    typeof email !== 'string' ||
-    typeof password !== 'string' ||
-    typeof displayName !== 'string'
-  ) {
-    throw new Error('Invalid input types.');
+  if (!result.success) {
+    console.log('error', result.error.flatten().fieldErrors);
+    return { success: false, errors: result.error.flatten().fieldErrors };
   }
 
   try {
     const userRecord = await auth.createUser({
-      displayName,
-      email,
-      password,
+      displayName: data.name,
+      email: data.email,
+      password: data.password,
     });
 
-    //console.log('Successfully created new user:', userRecord);
-
-    // Hash the password before storing it in Firestore
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const userData = {
       name: userRecord.displayName,
@@ -53,45 +55,65 @@ export async function signUpAction(formData: {
     };
 
     await db.collection('users').doc(userRecord.uid).set(userData);
-    //console.log('User data written to database:', userData);
 
     await signIn('credentials', {
-      email,
-      password,
+      email: data.email,
+      password: data.password,
       redirectTo: '/',
     });
+
+    return { success: true };
   } catch (error) {
-    //console.error('Error creating new user:', error);
-    throw new Error('Failed to create a new user. Please try again.');
+    //console.log('Error:', error);
+    if (error instanceof Error) {
+      return {
+        success: false,
+        errors: {
+          _form: [error.message],
+        },
+      };
+    } else {
+      return {
+        success: false,
+        errors: {
+          _form: ['An unexpected error occurred. Please try again.'],
+        },
+      };
+    }
   } finally {
     redirect('/');
   }
 }
 
-//user sign in
+//user sign in with Google
 export async function signInWithGoogle() {
   await signIn('google', { redirectTo: '/account' });
 }
 
 //user sign in
-export async function signInAction(formData: { get: (arg0: string) => any }) {
+export async function signInAction(
+  formState: AuthResponse,
+  formData: FormData,
+): Promise<AuthResponse> {
+  const result = signInSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
+
+  if (!result.success) {
+    return { success: false, errors: result.error.flatten().fieldErrors };
+  }
+
   try {
-    const email = formData.get('email');
-    const password = formData.get('password');
-
-    if (!email || !password) {
-      throw new Error('Email and password are required.');
-    }
-
-    if (typeof email !== 'string' || typeof password !== 'string') {
-      throw new Error('Invalid input types.');
-    }
+    const { email, password } = result.data;
 
     await signIn('credentials', {
       email,
       password,
       redirectTo: '/',
     });
+
+    return { success: true };
   } catch (error) {
     //console.error('Error:', error);
     // let errorMessage = '';
@@ -104,8 +126,21 @@ export async function signInAction(formData: { get: (arg0: string) => any }) {
     //   errorMessage = (error as any).message;
     // }
 
-    //console.error('Error creating new user:', error);
-    throw new Error('Failed to create a new user. Please try again.');
+    if (error instanceof Error) {
+      return {
+        success: false,
+        errors: {
+          _form: [error.message],
+        },
+      };
+    } else {
+      return {
+        success: false,
+        errors: {
+          _form: ['An unexpected error occurred. Please try again.'],
+        },
+      };
+    }
   } finally {
     redirect('/');
   }
