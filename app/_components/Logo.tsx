@@ -13,7 +13,7 @@ function Logo() {
         width="60"
         priority
       />
-      <span className="text-lg font-bold text-primary-50">Gymtastic App</span>
+      <span className="text-lg font-bold text-primary-700">Gymtastic App</span>
     </Link>
   );
 }

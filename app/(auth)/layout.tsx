@@ -33,7 +33,7 @@ export default async function RootLayout({
       <ThemeProvider>
         <body className={`${inter.className}`}>
           <main className="mx-auto bg-primary-100">
-            <div className="mx-auto my-0 flex max-w-xl flex-col gap-12 px-12 pb-16 pt-10">
+            <div className="mx-auto my-0 flex max-w-3xl flex-col gap-12 px-12 pb-16 pt-10">
               {children}
             </div>
           </main>
