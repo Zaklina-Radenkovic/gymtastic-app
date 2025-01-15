@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { NextAuthConfig } from 'next-auth';
 import { FirestoreAdapter } from '@next-auth/firebase-adapter';
@@ -10,6 +10,8 @@ import { db, auth as firebaseAuth } from '@/app/_lib/firebase';
 import { User } from 'next-auth';
 import { AdapterSession, AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
+import { signInSchema } from '../_utils/schemas/authSchema';
+import { CustomError } from '../_utils/errors';
 
 export const authConfig: NextAuthConfig = {
   adapter: FirestoreAdapter(db),
@@ -17,32 +19,26 @@ export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
-      credentials: {
-        // email: {
-        //   label: 'Email',
-        //   type: 'email',
-        //   placeholder: 'john.doe@example.com',
-        // },
-        // password: { label: 'Password', type: 'password' },
-        //name: { label: 'Name', type: 'text' },
-      },
+      credentials: {},
 
       async authorize(
-        credentials: Partial<Record<'email' | 'password', unknown>>,
+        credentials: Partial<Record<'email' | 'password', string>>,
         req: Request,
       ): Promise<User | null> {
-        const email = credentials?.email as string;
-        const password = credentials?.password as string;
+        const { email, password } = signInSchema.parse({
+          email: credentials?.email as string,
+          password: credentials?.password as string,
+        });
 
         if (!email || !password) {
-          throw new Error('Email and Password are required');
+          throw new CustomError('Email and Password are required');
         }
 
         try {
           const userRecord = await firebaseAuth.getUserByEmail(email);
 
           if (!userRecord) {
-            throw new Error('No user found with this email.');
+            throw new CustomError('No user found with this email.');
           }
           // Retrieve the stored hash and compare it with the provided password
           const userDoc = await db
@@ -51,13 +47,13 @@ export const authConfig: NextAuthConfig = {
             .get();
 
           if (!userDoc.exists) {
-            throw new Error('User data not found in Firestore.');
+            throw new CustomError('User data not found in Firestore.');
           }
 
           const userData = userDoc.data();
 
           if (!userData || !userData.passwordHash) {
-            throw new Error('Invalid credentials.');
+            throw new CustomError('Invalid credentials.');
           }
 
           // 3. Verify the provided password against the stored hash
@@ -67,7 +63,7 @@ export const authConfig: NextAuthConfig = {
           );
 
           if (!isPasswordValid) {
-            throw new Error('Invalid credentials.');
+            throw new CustomError('Email/Password mismatched.');
           }
           // Return user object
           return {
@@ -81,8 +77,19 @@ export const authConfig: NextAuthConfig = {
             passwordHash: userData.passwordHash,
           };
         } catch (error) {
-          console.error('Error during email/password authentication:', error);
-          return null;
+          // console.error('Error during email/password authentication:', error);
+
+          // throw new Error(error.message || 'Authentication failed.');
+          if (error instanceof CustomError) {
+            console.error('Custom error:', error.message);
+            throw error;
+          } else if (error instanceof Error) {
+            console.error('Error:', error.message);
+            throw new CustomError('Authentication failed.');
+          } else {
+            console.error('Unknown error:', error);
+            throw new CustomError('An unexpected error occurred.');
+          }
         }
       },
     }),

@@ -5,17 +5,17 @@ import { useFormStatus } from 'react-dom';
 function SubmitButton({
   children,
   pendingLabel,
-  onClick,
+  className,
 }: {
   children: React.ReactNode;
   pendingLabel?: string;
-  onClick?: () => void;
+  className?: string;
 }) {
   const { pending } = useFormStatus();
 
   return (
     <button
-      className="w-[140px] rounded-sm bg-indigo-600 px-4 py-3 text-sm font-medium text-indigo-50 hover:bg-indigo-500 hover:text-indigo-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
+      className={`w-[140px] rounded-sm bg-indigo-600 px-4 py-3 text-sm font-medium text-indigo-50 hover:bg-indigo-500 hover:text-indigo-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300 ${className}`}
       disabled={pending}
     >
       {' '}

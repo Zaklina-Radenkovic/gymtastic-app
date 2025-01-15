@@ -1,6 +1,6 @@
 type FormRowVerticalProps = {
   label?: string;
-  error?: string;
+  error?: string | string[] | undefined;
   children: React.JSX.Element;
 };
 

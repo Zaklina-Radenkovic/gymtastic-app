@@ -9,6 +9,7 @@ import { signIn, signOut } from './auth';
 
 import { signInSchema, signUpSchema } from '@/app/_utils/schemas/authSchema';
 import { AuthError } from 'next-auth';
+import { CustomError, isRedirectError } from '../_utils/errors';
 
 interface AuthResponse {
   success: boolean;
@@ -92,13 +93,14 @@ export async function signInWithGoogle() {
 
 //user sign in
 export async function signInAction(
-  formState: AuthResponse,
+  formState: AuthResponse | undefined,
   formData: FormData,
 ): Promise<AuthResponse> {
-  const result = signInSchema.safeParse({
+  const data = {
     email: formData.get('email'),
     password: formData.get('password'),
-  });
+  };
+  const result = signInSchema.safeParse(data);
 
   if (!result.success) {
     return { success: false, errors: result.error.flatten().fieldErrors };
@@ -107,24 +109,34 @@ export async function signInAction(
   try {
     const { email, password } = result.data;
 
-    await signIn('credentials', {
+    const response = await signIn('credentials', {
       email,
       password,
-      redirectTo: '/',
+      redirect: false,
     });
+    console.log('response from action ', response);
 
+    redirect('/');
     return { success: true };
   } catch (error) {
-    //console.error('Error:', error);
-    // let errorMessage = '';
-    // if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
-    //   redirect('/');
-    //   // window.location.href = '/';
-    // } else if (error instanceof AuthError) {
-    //   errorMessage = error.message;
-    // } else {
-    //   errorMessage = (error as any).message;
-    // }
+    if (isRedirectError(error as Error & { digest?: string })) {
+      console.error('Redirect error:', error);
+      // funny thing, this redirects us to the app in case of success
+      throw error;
+    }
+
+    if (error instanceof CustomError) {
+      return { success: false, errors: { _form: [error.message] } };
+    }
+
+    if (error instanceof AuthError) {
+      return {
+        success: false,
+        errors: {
+          _form: [`Authentication Error: ${error.message}`],
+        },
+      };
+    }
 
     if (error instanceof Error) {
       return {
@@ -141,8 +153,6 @@ export async function signInAction(
         },
       };
     }
-  } finally {
-    redirect('/');
   }
 }
 
