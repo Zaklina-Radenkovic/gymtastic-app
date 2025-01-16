@@ -1,17 +1,18 @@
 import { Inter } from 'next/font/google';
-//import { ThemeProvider } from '../_context/ThemeContext';
+import { ThemeProvider } from '@/app/_context/ThemeContext';
+import { AuthProvider } from '@/app/_context/AuthProvider';
 import '@/app/_styles/globals.css';
-
-export const metadata = {
-  title: 'Login | Gymtastic App',
-
-  // description: 'Sports scheduling app',
-};
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 });
+
+// const cookieStore = cookies();
+
+// const initialTheme = cookieStore.get('theme')?.value || 'light';
+
+// console.log('initialTheme ', initialTheme);
 
 export default function RootLayout({
   children,
@@ -19,16 +20,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      {/* <ThemeProvider> */}
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = document.cookie.match(/theme=(dark|light)/)?.[1] || 'light';
+                document.documentElement.classList.add(theme);
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.className}`}>
-        {/* <main className="mx-auto bg-primary-100">
-          <div className="mx-auto my-0 flex max-w-xl flex-col gap-12 px-12 pb-16 pt-10"> */}
-        {children}
-        {/* </div>
-        </main> */}
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
-      {/* </ThemeProvider> */}
     </html>
   );
 }

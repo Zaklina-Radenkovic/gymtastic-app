@@ -3,6 +3,10 @@ import Logo from '../../_components/Logo';
 import SignupForm from '../../_components/SignupForm';
 import GoogleSigninBtn from '@/app/_components/GoogleSigninBtn';
 
+export const metadata = {
+  title: 'Sign up',
+};
+
 export default function Page() {
   return (
     <main className="grid min-h-screen grid-cols-[48rem] content-center justify-center gap-9 bg-primary-100">
