@@ -8,7 +8,9 @@ export const signUpSchema = z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long' })
       .max(100, { message: 'Password is too long' }),
-    repeatPassword: z.string(),
+    repeatPassword: z
+      .string()
+      .min(8, { message: 'Password must be at least 8 characters long' }),
   })
   .refine((data) => data.password === data.repeatPassword, {
     message: 'Passwords do not match',

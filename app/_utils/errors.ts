@@ -1,13 +1,13 @@
+import { CredentialsSignin } from 'next-auth';
+
 export function isRedirectError(error: Error & { digest?: string }): boolean {
   return !!error.digest?.startsWith('NEXT_REDIRECT');
 }
 
-export class CustomError extends Error {
-  code = 'custom_error';
-
+export class CustomError extends CredentialsSignin {
   constructor(message: string) {
-    super(message);
-    this.name = 'CustomError';
-    this.message = message;
+    super(message); // Call the parent class constructor
+    this.message = message; // Set the error name
   }
+  code = 'custom_error';
 }

@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import Form from './Form';
 import FormRow from './FormRow';
@@ -8,34 +9,34 @@ import SubmitButton from './SubmitButton';
 
 import { signUpAction } from '../_lib/actions';
 
-type FormState = {
-  errors: Record<string, string>;
-};
+// type FormState = {
+//   errors: Record<string, string>;
+// };
 
 function SignupForm() {
-  //@ts-ignore
-  const [formState, action] = useFormState<FormState>(signUpAction, {
-    errors: {},
-  });
+  const [formState, action] = useFormState(signUpAction, undefined);
 
   return (
-    <Form action={action}>
-      <FormRow label="Full name" error={formState.errors?.name}>
+    <Form action={action} error={formState?.errors?._form}>
+      <FormRow label="Full name" error={formState?.errors?.name}>
         <Input type="text" name="name" />
       </FormRow>
 
-      <FormRow label="Email address" error={formState.errors?.email}>
+      <FormRow label="Email address" error={formState?.errors?.email}>
         <Input type="email" name="email" />
       </FormRow>
 
       <FormRow
         label="Password (min 8 characters)"
-        error={formState.errors?.password}
+        error={formState?.errors?.password}
       >
         <Input type="password" name="password" />
       </FormRow>
 
-      <FormRow label="Repeat password" error={formState.errors?.repeatPassword}>
+      <FormRow
+        label="Repeat password"
+        error={formState?.errors?.repeatPassword}
+      >
         <Input type="password" name="repeatPassword" />
       </FormRow>
 
@@ -43,6 +44,13 @@ function SignupForm() {
         <Button variation="secondary">Cancel</Button>
         <SubmitButton pendingLabel="Signing up...">Sign up</SubmitButton>
       </FormRow>
+
+      <p className="text-center text-sm text-primary-700">
+        Already have an account?{' '}
+        <Link className="p-1 font-bold text-indigo-700" href="/sign-in">
+          Sign In
+        </Link>
+      </p>
     </Form>
   );
 }

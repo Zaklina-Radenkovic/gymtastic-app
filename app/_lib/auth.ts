@@ -1,4 +1,4 @@
-import NextAuth, { CredentialsSignin } from 'next-auth';
+import NextAuth from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { NextAuthConfig } from 'next-auth';
 import { FirestoreAdapter } from '@next-auth/firebase-adapter';
@@ -77,9 +77,6 @@ export const authConfig: NextAuthConfig = {
             passwordHash: userData.passwordHash,
           };
         } catch (error) {
-          // console.error('Error during email/password authentication:', error);
-
-          // throw new Error(error.message || 'Authentication failed.');
           if (error instanceof CustomError) {
             console.error('Custom error:', error.message);
             throw error;

@@ -19,8 +19,8 @@ interface AuthResponse {
 
 //user sign up
 export async function signUpAction(
-  formState: AuthResponse,
-  formData: { get: (arg0: string) => any },
+  formState: AuthResponse | undefined,
+  formData: FormData,
 ): Promise<AuthResponse> {
   const data = {
     name: formData.get('name'),
@@ -32,18 +32,17 @@ export async function signUpAction(
   const result = signUpSchema.safeParse(data);
 
   if (!result.success) {
-    console.log('error', result.error.flatten().fieldErrors);
     return { success: false, errors: result.error.flatten().fieldErrors };
   }
 
   try {
     const userRecord = await auth.createUser({
-      displayName: data.name,
-      email: data.email,
-      password: data.password,
+      displayName: result.data.name,
+      email: result.data.email,
+      password: result.data.password,
     });
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(result.data.password, 10);
 
     const userData = {
       name: userRecord.displayName,
@@ -121,7 +120,7 @@ export async function signInAction(
   } catch (error) {
     if (isRedirectError(error as Error & { digest?: string })) {
       console.error('Redirect error:', error);
-      // funny thing, this redirects us to the app in case of success
+      // redirects to the app in case of success
       throw error;
     }
 

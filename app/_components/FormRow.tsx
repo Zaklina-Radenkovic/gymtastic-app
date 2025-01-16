@@ -2,7 +2,7 @@ type FormRow = {
   label?: String;
   children: React.ReactNode;
   className?: string;
-  error?: string;
+  error?: string[] | undefined;
 };
 
 function FormRow({ label, children, className, error }: FormRow) {

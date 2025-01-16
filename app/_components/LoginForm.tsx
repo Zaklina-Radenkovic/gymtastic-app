@@ -1,12 +1,12 @@
 'use client';
+import Link from 'next/link';
 import Form from './Form';
 import Input from './Input';
 import FormRowVertical from './FormRowVertical';
-import Button from './Button';
+import SubmitButton from './SubmitButton';
 
 import { signInAction } from '@/app/_lib/actions';
 import { useFormState } from 'react-dom';
-import SubmitButton from './SubmitButton';
 
 function LoginForm() {
   const [formState, action] = useFormState(signInAction, undefined);
@@ -26,6 +26,12 @@ function LoginForm() {
           Sign in
         </SubmitButton>
       </FormRowVertical>
+      <p className="text-center text-sm text-primary-700">
+        Don&apos;t have an account?{' '}
+        <Link className="p-1 font-bold text-indigo-700" href="/sign-up">
+          Sign Up
+        </Link>
+      </p>
     </Form>
   );
 }

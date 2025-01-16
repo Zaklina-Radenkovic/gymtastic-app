@@ -2,7 +2,6 @@ import FormRowVertical from '@/app/_components/FormRowVertical';
 import LoginForm from '../../_components/LoginForm';
 import Logo from '../../_components/Logo';
 import GoogleSigninBtn from '@/app/_components/GoogleSigninBtn';
-import Link from 'next/link';
 
 export default function Page() {
   return (
@@ -14,13 +13,6 @@ export default function Page() {
         Log in to your account
       </h4>
       <LoginForm />
-
-      <p className="text-center text-sm text-primary-700">
-        Don&apos;t have an account?{' '}
-        <Link className="p-1 font-bold text-indigo-700" href="/sign-up">
-          Sign Up
-        </Link>
-      </p>
 
       <FormRowVertical>
         <GoogleSigninBtn />
