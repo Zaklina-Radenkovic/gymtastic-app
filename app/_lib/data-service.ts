@@ -159,7 +159,7 @@ export const getUsers = async function (
       }));
     }
     // console.log(usersList);
-    console.log(count, 'on server');
+    //console.log(count, 'on server');
   } catch (error) {
     console.error('Error fetching users:', error);
   }
@@ -192,10 +192,10 @@ export const createUser = async function (userId: string, userData: {}) {
 
     await userRef.set(userData);
 
-    console.log(`User document created for ID: ${userId}`);
+    //console.log(`User document created for ID: ${userId}`);
     return { success: true };
   } catch (error) {
-    console.error('Error creating user document:', error);
+    //console.error('Error creating user document:', error);
     throw new Error('Failed to create user document');
   }
 };

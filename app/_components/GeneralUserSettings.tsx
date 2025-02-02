@@ -16,7 +16,7 @@ function GeneralUserSettings({ user }: any) {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-semibold leading-snug">{user.name}</h1>
+          <h1 className="text-3xl font-semibold leading-snug">{user?.name}</h1>
           <span className="text-primary-600">{user?.email}</span>
         </div>
       </div>

@@ -113,7 +113,7 @@ export async function signInAction(
       password,
       redirect: false,
     });
-    console.log('response from action ', response);
+    //console.log('response from action ', response);
 
     redirect('/');
     return { success: true };
@@ -167,7 +167,7 @@ export async function updateCustomer(formData: { get: (arg0: string) => any }) {
     id,
     timestamp: new Date().toISOString(),
   };
-  console.log('update user from action ', updateData);
+  //console.log('update user from action ', updateData);
 
   try {
     const userRef = db.collection('users').doc(id);
