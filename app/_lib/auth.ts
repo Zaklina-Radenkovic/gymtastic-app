@@ -104,9 +104,16 @@ export const authConfig: NextAuthConfig = {
       if (!user.id) {
         return false;
       }
+
       if (account?.provider === 'google') {
+        const userRef = db.collection('users').doc(user.id);
+        const userDoc = await userRef.get();
+
+        if (!userDoc.exists) {
+          //console.log(`User ${user.id} does not exist in Firestore yet.`);
+          return true; // Let Firestore Adapter create the user
+        }
         try {
-          const userRef = db.collection('users').doc(user.id);
           await userRef.set(
             {
               id: user.id,
@@ -129,87 +136,9 @@ export const authConfig: NextAuthConfig = {
       return true;
     },
 
-    // async signIn({ user, account, profile, credentials }) {
-    //   console.log('CREDENTIALS IN SIGNIN CALLBACK ', credentials);
-    //   if (!user.id) {
-    //     return false;
-    //   }
-
-    //   try {
-    //     const userRef = firestore().collection('users').doc(user.id);
-
-    //     if (account?.provider === 'credentials') {
-    //       const { email, password } = credentials || {};
-
-    //       if (!email || !password) {
-    //         console.error('Email or password is missing in credentials');
-    //         return false;
-    //       }
-    //       // Handle email/password sign-in
-    //       const userSnapshot = await userRef.get();
-
-    //       if (!userSnapshot.exists) {
-    //         // Create user in Firestore if it doesn't exist
-    //         await userRef.set({
-    //           id: user.id,
-    //           email: user.email,
-    //           name: user.name || 'Unnamed User' || null,
-    //           //image: user.image || null,
-    //           role: 'member', // Default role
-    //           timestamp: firestore.FieldValue.serverTimestamp(),
-    //           passwordHash: null,
-    //         });
-    //       }
-
-    //       // Optionally: Validate the password (if needed)
-    //       // You can compare the provided password with the stored hashed password here
-    //       const userData = userSnapshot?.data();
-    //       if (!userData || !userData.passwordHash) {
-    //         throw new Error('Password hash is missing.');
-    //       }
-    //       const isValidPassword = await verifyPassword(
-    //         password as string,
-    //         userData.passwordHash,
-    //       );
-
-    //       if (!isValidPassword) {
-    //         return false; // Password mismatch
-    //       }
-    //     } else if (account?.provider === 'google') {
-    //       // Handle Google sign-in
-    //       const userSnapshot = await userRef.get();
-
-    //       if (!userSnapshot.exists) {
-    //         // Create user in Firestore if it doesn't exist
-    //         await userRef.set({
-    //           id: user.id,
-    //           email: user.email,
-    //           name: user.name || profile?.name || 'Google User',
-    //           //image: user.image || profile?.picture || null,
-    //           role: 'member', // Default role
-    //           timestamp: firestore.FieldValue.serverTimestamp(),
-    //           passwordHash: null,
-    //         });
-    //       } else {
-    //         // Update existing user with the latest data
-    //         await userRef.update({
-    //           name: user.name || profile?.name,
-    //           // image: user.image || profile?.picture,
-    //           lastLoginAt: firestore.FieldValue.serverTimestamp(),
-    //         });
-    //       }
-    //     }
-
-    //     return true;
-    //   } catch (error) {
-    //     console.error('Error in signIn callback:', error);
-    //     return false;
-    //   }
-    // },
-
     async jwt({ token, user }) {
-      console.log('JWT callback:', token);
-      console.log('User in JWT callback:', user);
+      // console.log('JWT callback:', token);
+      // console.log('User in JWT callback:', user);
       // Adding user.id to the token during initial sign-in
       if (user) {
         token.id = user.id as string;
@@ -261,7 +190,7 @@ export const authConfig: NextAuthConfig = {
       } catch (error) {
         console.error('Error fetching updated user data:', error);
       }
-      console.log('Session after modification:', session);
+      //console.log('Session after modification:', session);
       return session;
     },
   },
@@ -269,14 +198,14 @@ export const authConfig: NextAuthConfig = {
   events: {
     async signOut(message) {
       const token = 'token' in message ? message.token : null;
-      console.log('User signed out:', token);
+      //console.log('User signed out:', token);
 
       if (token && token.sub) {
         try {
           await firebaseAuth.revokeRefreshTokens(token.sub);
-          console.log(
-            `Refresh tokens for user ${token.sub} have been revoked.`,
-          );
+          // console.log(
+          //   `Refresh tokens for user ${token.sub} have been revoked.`,
+          // );
         } catch (error) {
           console.error('Error revoking refresh tokens:', error);
         }
