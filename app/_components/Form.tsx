@@ -2,7 +2,7 @@ type FormProps = {
   children: React.ReactNode;
   action?: (payload: FormData) => void;
   className?: string;
-  error: string[] | undefined;
+  error?: string[] | undefined;
 };
 
 function Form({ children, className, action, error }: FormProps) {

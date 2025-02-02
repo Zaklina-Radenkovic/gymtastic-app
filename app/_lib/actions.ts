@@ -7,7 +7,11 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn, signOut } from './auth';
 
-import { signInSchema, signUpSchema } from '@/app/_utils/schemas/authSchema';
+import {
+  signInSchema,
+  signUpSchema,
+  updateCustomerSchema,
+} from '@/app/_utils/schemas/authSchema';
 import { AuthError } from 'next-auth';
 import { CustomError, isRedirectError } from '../_utils/errors';
 
@@ -156,23 +160,40 @@ export async function signInAction(
 }
 
 //updating customer data
-export async function updateCustomer(formData: { get: (arg0: string) => any }) {
-  const name = formData.get('name');
+export async function updateCustomer(
+  formState: any,
+  formData: { get: (arg0: string) => any },
+) {
+  const parsedName = updateCustomerSchema.safeParse({
+    name: formData.get('name') || undefined,
+  });
+
+  if (!parsedName.success) {
+    const errors = parsedName.error.flatten().fieldErrors;
+    return {
+      success: false,
+      errors: {
+        name: errors.name ?? [], // Ensuring `name` key exists
+      },
+    };
+  }
+
+  const { name } = parsedName.data;
+
   const email = formData.get('email');
   const id = formData.get('id');
 
-  const updateData = {
+  const data = {
     name,
     email,
     id,
     timestamp: new Date().toISOString(),
   };
-  //console.log('update user from action ', updateData);
 
   try {
     const userRef = db.collection('users').doc(id);
 
-    await userRef.update(updateData);
+    await userRef.update(data);
 
     // // Trigger session refresh on client
     // if (typeof window !== 'undefined') {
@@ -180,7 +201,12 @@ export async function updateCustomer(formData: { get: (arg0: string) => any }) {
     //   await refreshSession();
     // }
   } catch (error) {
-    throw new Error('Customer could not be updated');
+    return {
+      success: false,
+      errors: {
+        _form: ['Customer could not be updated'],
+      },
+    };
   }
 
   revalidatePath(`/customers/${id}/edit`);
