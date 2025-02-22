@@ -43,6 +43,7 @@ const Input: React.FC<InputProps> = ({
         <input
           className="rounded-sm text-xs file:mr-4 file:cursor-pointer file:rounded-sm file:border-none file:bg-indigo-600 file:px-4 file:py-2 file:font-medium file:text-primary-50 file:transition-colors file:duration-200 file:hover:bg-indigo-700"
           type="file"
+          onChange={onChange}
         />
       )}
 

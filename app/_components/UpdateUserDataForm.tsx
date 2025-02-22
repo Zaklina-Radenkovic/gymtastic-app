@@ -9,12 +9,19 @@ import SubmitButton from './SubmitButton';
 import { DocumentData } from 'firebase/firestore';
 
 import { updateCustomer } from '../_lib/actions';
+import { useState } from 'react';
 
 function UpdateUserDataForm({ user }: DocumentData) {
   const [formState, action] = useFormState(updateCustomer, undefined);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleSubmit = (formData: FormData) => {
+    if (selectedFile) formData.append('image', selectedFile);
+    action(formData);
+  };
 
   return (
-    <Form action={action}>
+    <Form action={handleSubmit}>
       <FormRow label="Full name" error={formState?.errors?.name}>
         <Input defaultValue={user.name} name="name" type="text" />
       </FormRow>
@@ -31,9 +38,12 @@ function UpdateUserDataForm({ user }: DocumentData) {
       <FormRow label="Avatar image">
         <Input
           type="file"
-          // id="avatar"
+          name="image"
           accept="image/*"
-          //   onChange={(e) => setAvatar(e.target.files[0])}
+          onChange={(e) => {
+            const file = (e.target as HTMLInputElement).files?.[0];
+            setSelectedFile(file || null);
+          }}
         />
       </FormRow>
       <FormRow>

@@ -1,5 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, cert, getApp, getApps } from 'firebase-admin/app';
+import { getStorage } from 'firebase-admin/storage';
 import { getAuth } from 'firebase-admin/auth';
 
 const serviceAccount = {
@@ -23,10 +24,12 @@ var admin = require('firebase-admin');
 const app = !getApps().length
   ? admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     })
   : getApp();
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage();
 
-export { db, auth };
+export { db, auth, storage };

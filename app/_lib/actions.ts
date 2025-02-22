@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
 import { db, auth } from '../_lib/firebase';
+import supabase from '../_lib/supabase';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn, signOut } from './auth';
@@ -160,10 +161,10 @@ export async function signInAction(
 }
 
 //updating customer data
-export async function updateCustomer(
-  formState: any,
-  formData: { get: (arg0: string) => any },
-) {
+export async function updateCustomer(formState: any, formData: FormData) {
+  // const formDataEntries = Array.from(formData?.entries());
+  // console.log('FormData entries:', formDataEntries);
+
   const parsedName = updateCustomerSchema.safeParse({
     name: formData.get('name') || undefined,
   });
@@ -181,12 +182,38 @@ export async function updateCustomer(
   const { name } = parsedName.data;
 
   const email = formData.get('email');
-  const id = formData.get('id');
+  const id = formData.get('id') as string | null;
+
+  if (!id) {
+    return {
+      success: false,
+      errors: {
+        _form: ['ID is required'],
+      },
+    };
+  }
+  const file = formData.get('image') as File | null;
+
+  let imageUrl = null;
+
+  if (file) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `avatar-${id}-${Math.random()}.${fileExt}`;
+
+    const { error: storageError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, file, { contentType: file.type });
+
+    if (storageError) throw new Error('Upload failed');
+
+    imageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
+  }
 
   const data = {
     name,
     email,
     id,
+    image: imageUrl,
     timestamp: new Date().toISOString(),
   };
 
@@ -195,11 +222,8 @@ export async function updateCustomer(
 
     await userRef.update(data);
 
-    // // Trigger session refresh on client
-    // if (typeof window !== 'undefined') {
-    //   const { refreshSession } = await import('@/app/_utils/auth');
-    //   await refreshSession();
-    // }
+    revalidatePath(`/customers/${id}/edit`);
+    return { success: true };
   } catch (error) {
     return {
       success: false,
@@ -208,8 +232,6 @@ export async function updateCustomer(
       },
     };
   }
-
-  revalidatePath(`/customers/${id}/edit`);
 }
 
 // export async function updateCustomer(formData: { get: (arg0: string) => any }) {
@@ -253,3 +275,17 @@ export async function setThemeCookies(theme: string) {
 export async function signOutAction() {
   await signOut({ redirectTo: '/' });
 }
+
+// async function testStorageConnection() {
+//   const { data, error } = await supabase.storage
+//     .from('avatars') // Specify your bucket name
+//     .list(); // List all objects in the bucket
+
+//   if (error) {
+//     console.error('Error accessing bucket:', error);
+//   } else {
+//     console.log('Files in bucket:', data);
+//   }
+// }
+
+// testStorageConnection();

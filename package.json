@@ -11,6 +11,8 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@next-auth/firebase-adapter": "^2.0.1",
+    "@supabase/storage-js": "^2.7.1",
+    "@supabase/supabase-js": "^2.48.1",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^2.4.3",
     "cookies-next": "^4.2.1",

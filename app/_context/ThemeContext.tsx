@@ -9,7 +9,7 @@ interface ThemeContextProps {
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext(undefined);
+const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -33,7 +33,6 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    //@ts-ignore
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
