@@ -14,7 +14,7 @@ export default async function Page() {
     <>
       <GeneralUserSettings user={session?.user} />
 
-      <ConfirmDelete />
+      {session?.user && <ConfirmDelete user={session.user} />}
     </>
   );
 }

@@ -222,7 +222,7 @@ export async function updateCustomer(formState: any, formData: FormData) {
 
     await userRef.update(data);
 
-    revalidatePath(`/customers/${id}/edit`);
+    revalidatePath(`/`);
     return { success: true };
   } catch (error) {
     return {
@@ -233,6 +233,37 @@ export async function updateCustomer(formState: any, formData: FormData) {
     };
   }
 }
+
+///  DELETE ACCOUNT  ////
+export const deleteAccount = async (userId: string) => {
+  try {
+    await db.collection('users').doc(userId).delete();
+
+    try {
+      await auth.getUser(userId);
+      await auth.deleteUser(userId);
+    } catch (authError: any) {
+      if (authError.code === 'auth/user-not-found') {
+        console.warn(
+          `User ${userId} not found in Firebase Auth, skipping deletion.`,
+        );
+      } else {
+        throw authError;
+      }
+    }
+
+    await signOut({ redirect: false });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    };
+  }
+};
 
 // export async function updateCustomer(formData: { get: (arg0: string) => any }) {
 //   const fullName = formData.get('name');

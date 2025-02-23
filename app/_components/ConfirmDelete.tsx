@@ -3,7 +3,11 @@ import Button from './Button';
 import Modal from './Modal';
 import ConfirmDeleteForm from './ConfirmDeleteForm';
 
-function ConfirmDelete() {
+interface ConfirmDeleteProps {
+  user: any; // Replace 'any' with the appropriate type for 'user'
+}
+
+function ConfirmDelete({ user }: ConfirmDeleteProps) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-lg font-medium leading-snug">Delete your account</h3>
@@ -20,6 +24,7 @@ function ConfirmDelete() {
             <ConfirmDeleteForm
               resourceName="account"
               onCloseModal={() => close()}
+              user={user}
             />
           </Modal.Window>
         </Modal>
