@@ -31,7 +31,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
           name="email"
           defaultValue={user.email}
           readOnly
-          className="bg-primary-400 text-primary-600"
+          className="bg-primary-400 text-primary-600 focus:outline-none"
         />
       </FormRow>
       <input hidden name="id" value={user.id} readOnly />
