@@ -12,9 +12,12 @@ import { updateCustomer } from '../_lib/actions';
 import { useState } from 'react';
 
 function UpdateUserDataForm({ user }: DocumentData) {
-  const [formState, action] = useFormState(updateCustomer, undefined);
+  const [formState, action] = useFormState(updateCustomer, {
+    success: true,
+    errors: {},
+  });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  //console.log('Component rendered, formState:', formState);
   const handleSubmit = (formData: FormData) => {
     if (selectedFile) formData.append('image', selectedFile);
     action(formData);
@@ -35,7 +38,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
         />
       </FormRow>
       <input hidden name="id" value={user.id} readOnly />
-      <FormRow label="Avatar image">
+      <FormRow label="Avatar image" error={formState?.errors?.image}>
         <Input
           type="file"
           name="image"
@@ -46,6 +49,10 @@ function UpdateUserDataForm({ user }: DocumentData) {
           }}
         />
       </FormRow>
+
+      {formState?.errors?._form && (
+        <p className="text-sm text-red-500">{formState.errors._form[0]}</p>
+      )}
       <FormRow>
         <Button type="reset" variation="secondary">
           Cancel
