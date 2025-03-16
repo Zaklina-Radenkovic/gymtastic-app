@@ -31,3 +31,23 @@ export const updateCustomerSchema = z.object({
     .trim()
     .min(3, { message: 'Name must be at least 3 characters long' }),
 });
+
+export const updatePasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .trim()
+      .min(8, { message: 'Password must be at least 8 characters long' }) // This will now handle both required and min length
+      .refine((val) => val.length > 0, { message: 'New password is required' }), // This ensures
+    repeatPassword: z
+      .string()
+      .trim()
+      .min(8, { message: 'Password must be at least 8 characters long' }) // Handles min length
+      .refine((val) => val.length > 0, {
+        message: 'Repeat password is required',
+      }), // Ensures it's
+  })
+  .refine((data) => data.newPassword === data.repeatPassword, {
+    message: 'Passwords do not match',
+    path: ['repeatPassword'], // Associate the error with repeatPassword
+  });

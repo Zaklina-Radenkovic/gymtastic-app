@@ -1,34 +1,35 @@
+'use client';
+import { useFormState } from 'react-dom';
 import Button from './Button';
 import Form from './Form';
 import FormRow from './FormRow';
 import Input from './Input';
+import SubmitButton from './SubmitButton';
+import { updatePassword } from '../_lib/actions';
 
 function UpdatePasswordForm() {
+  const [formState, action] = useFormState(updatePassword, undefined);
+
   return (
-    <Form>
+    <Form action={action}>
       <FormRow
         label="New password (min 8 chars)"
-        // error={errors?.password?.message}
+        error={formState?.errors?.newPassword}
       >
-        <Input
-          type="password"
-          //   id="password"
-          //   autoComplete="current-password"
-        />
+        <Input type="password" name="newPassword" />
       </FormRow>
 
-      <FormRow label="Confirm password">
-        <Input
-          type="password"
-          // autoComplete="new-password"
-          id=""
-        />
+      <FormRow
+        label="Confirm password"
+        error={formState?.errors?.repeatPassword}
+      >
+        <Input type="password" name="repeatPassword" />
       </FormRow>
       <FormRow>
         <Button type="reset" variation="secondary">
           Cancel
         </Button>
-        <Button>Update password</Button>
+        <SubmitButton pendingLabel="Updating...">Update password</SubmitButton>
       </FormRow>
     </Form>
   );
