@@ -41,7 +41,7 @@ function Button({
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }): JSX.Element {
   return (
     <button

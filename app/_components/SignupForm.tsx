@@ -9,10 +9,6 @@ import SubmitButton from './SubmitButton';
 
 import { signUpAction } from '../_lib/actions';
 
-// type FormState = {
-//   errors: Record<string, string>;
-// };
-
 function SignupForm() {
   const [formState, action] = useFormState(signUpAction, undefined);
 
@@ -41,7 +37,15 @@ function SignupForm() {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary">Cancel</Button>
+        <Button
+          variation="secondary"
+          onClick={(e) => {
+            e.preventDefault();
+            e.currentTarget.form?.reset();
+          }}
+        >
+          Cancel
+        </Button>
         <SubmitButton pendingLabel="Signing up...">Sign up</SubmitButton>
       </FormRow>
 

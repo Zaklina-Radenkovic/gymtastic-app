@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { useFormState } from 'react-dom';
 import Form from './Form';
 import FormRow from './FormRow';
@@ -7,9 +8,7 @@ import Button from './Button';
 import SubmitButton from './SubmitButton';
 
 import { DocumentData } from 'firebase/firestore';
-
 import { updateCustomer } from '../_lib/actions';
-import { useState } from 'react';
 
 function UpdateUserDataForm({ user }: DocumentData) {
   const [formState, action] = useFormState(updateCustomer, {
@@ -17,7 +16,7 @@ function UpdateUserDataForm({ user }: DocumentData) {
     errors: {},
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  //console.log('Component rendered, formState:', formState);
+
   const handleSubmit = (formData: FormData) => {
     if (selectedFile) formData.append('image', selectedFile);
     action(formData);
@@ -54,7 +53,14 @@ function UpdateUserDataForm({ user }: DocumentData) {
         <p className="text-sm text-red-500">{formState.errors._form[0]}</p>
       )}
       <FormRow>
-        <Button type="reset" variation="secondary">
+        <Button
+          type="reset"
+          variation="secondary"
+          onClick={(e) => {
+            e.preventDefault();
+            e.currentTarget.form?.reset();
+          }}
+        >
           Cancel
         </Button>
         <SubmitButton pendingLabel="Updating...">Update account</SubmitButton>

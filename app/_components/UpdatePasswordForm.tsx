@@ -26,7 +26,14 @@ function UpdatePasswordForm() {
         <Input type="password" name="repeatPassword" />
       </FormRow>
       <FormRow>
-        <Button type="reset" variation="secondary">
+        <Button
+          type="reset"
+          variation="secondary"
+          onClick={(e) => {
+            e.preventDefault();
+            e.currentTarget.form?.reset();
+          }}
+        >
           Cancel
         </Button>
         <SubmitButton pendingLabel="Updating...">Update password</SubmitButton>
