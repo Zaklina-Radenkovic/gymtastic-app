@@ -1,22 +1,24 @@
 'use server';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
-
-import { db, auth } from '../_lib/firebase';
-import { signIn, signOut, auth as nextAuth } from './auth';
-import supabase from '../_lib/supabase';
+import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+import { db, auth } from '../_lib/firebase';
+import supabase from '../_lib/supabase';
+import { signIn, signOut, auth as nextAuth } from './auth';
 import {
   signInSchema,
   signUpSchema,
   updateCustomerSchema,
   updatePasswordSchema,
 } from '@/app/_utils/schemas/authSchema';
-import { AuthError } from 'next-auth';
-
-import { CustomError, isRedirectError } from '../_utils/errors';
+import {
+  CustomError,
+  isRedirectError,
+  isSupabaseConnectionError,
+} from '../_utils/errors';
 
 interface AuthResponse {
   success: boolean;
@@ -26,7 +28,7 @@ interface AuthResponse {
   redirect?: boolean;
 }
 
-//user sign up
+//user sign up ////
 export async function signUpAction(
   formState: AuthResponse | undefined,
   formData: FormData,
@@ -45,6 +47,16 @@ export async function signUpAction(
   }
 
   try {
+    const existingUser = await auth
+      .getUserByEmail(result.data.email)
+      .catch(() => null);
+    if (existingUser) {
+      return {
+        success: false,
+        errors: { email: ['Email is already in use.'] },
+      };
+    }
+
     const userRecord = await auth.createUser({
       displayName: result.data.name,
       email: result.data.email,
@@ -74,6 +86,11 @@ export async function signUpAction(
     return { success: true };
   } catch (error) {
     //console.log('Error:', error);
+    if (isRedirectError(error as Error & { digest?: string })) {
+      console.error('Redirect error:', error);
+      // redirects to the app in case of success
+      throw error;
+    }
     if (error instanceof Error) {
       return {
         success: false,
@@ -89,17 +106,15 @@ export async function signUpAction(
         },
       };
     }
-  } finally {
-    redirect('/');
   }
 }
 
-//user sign in with Google
+//// user sign in with Google ////
 export async function signInWithGoogle() {
   await signIn('google', { redirectTo: '/account' });
 }
 
-//user sign in
+/// user sign in  ////
 export async function signInAction(
   formState: AuthResponse | undefined,
   formData: FormData,
@@ -120,11 +135,10 @@ export async function signInAction(
     const response = await signIn('credentials', {
       email,
       password,
-      redirect: false,
+      redirectTo: '/',
     });
     //console.log('response from action ', response);
 
-    redirect('/');
     return { success: true };
   } catch (error) {
     if (isRedirectError(error as Error & { digest?: string })) {
@@ -164,10 +178,8 @@ export async function signInAction(
   }
 }
 
-//updating customer data
+//// updating customer data ///
 export async function updateCustomer(formState: any, formData: FormData) {
-  // const formDataEntries = Array.from(formData?.entries());
-  // console.log('FormData entries:', formDataEntries);
   try {
     const parsedName = updateCustomerSchema.safeParse({
       name: formData.get('name') || undefined,
@@ -178,13 +190,12 @@ export async function updateCustomer(formState: any, formData: FormData) {
       return {
         success: false,
         errors: {
-          name: errors.name ?? [], // Ensuring `name` key exists
+          name: errors.name ?? [],
         },
       };
     }
 
     const { name } = parsedName.data;
-
     const email = formData.get('email');
     const id = formData.get('id') as string | null;
 
@@ -238,23 +249,108 @@ export async function updateCustomer(formState: any, formData: FormData) {
     revalidatePath(`/`);
     return { success: true, errors: {} };
   } catch (error) {
-    // if (error.message.includes('getaddrinfo ENOTFOUND')) {
-    //   return {
-    //     success: false,
-    //     errors: {
-    //       image: [
-    //         'Image upload failed. This might be due to an inactive Supabase project. Please try again later.',
-    //       ],
-    //     },
-    //   };
-    // }
-    console.error('Update error:', error);
+    //console.error('Update error:', error);
+
+    if (isSupabaseConnectionError(error)) {
+      return {
+        success: false,
+        errors: {
+          _form: [
+            `Connection to Supabase failed. This might be due to an inactive project or network issues. Please check your Supabase status and try again later.`,
+          ],
+        },
+      };
+    }
+
     return {
       success: false,
       errors: {
         _form: ['Customer could not be updated'],
       },
     };
+  }
+}
+
+////// UPDATE PASSWORD //////
+export async function updatePassword(
+  formState: AuthResponse | undefined,
+  formData: FormData,
+): Promise<AuthResponse> {
+  const data = {
+    newPassword: formData.get('newPassword')?.toString() || '',
+    repeatPassword: formData.get('repeatPassword')?.toString() || '',
+  };
+
+  const result = updatePasswordSchema.safeParse(data);
+
+  const session = await nextAuth();
+
+  if (!session?.user?.id) {
+    throw new Error('Unauthorized');
+  }
+
+  if (!result.success) {
+    const fieldErrors = result.error.flatten().fieldErrors;
+    const orderedErrors: Record<string, string[]> = {};
+
+    // Prioritize required errors first
+    if (fieldErrors.newPassword?.some((msg) => msg.includes('required'))) {
+      orderedErrors.newPassword = ['New password is required'];
+    } else if (fieldErrors.newPassword) {
+      orderedErrors.newPassword = fieldErrors.newPassword;
+    }
+
+    if (fieldErrors.repeatPassword?.some((msg) => msg.includes('required'))) {
+      orderedErrors.repeatPassword = ['Repeat password is required'];
+    } else if (fieldErrors.repeatPassword) {
+      orderedErrors.repeatPassword = fieldErrors.repeatPassword;
+    }
+
+    // Check for mismatch error last
+    if (fieldErrors.repeatPassword?.some((msg) => msg.includes('match'))) {
+      orderedErrors._form = ['Passwords do not match'];
+    }
+
+    return { success: false, errors: orderedErrors };
+  }
+
+  const { newPassword } = result.data;
+
+  try {
+    const userId = session.user.id;
+
+    const hashedPassword = await bcrypt.hash(result.data.newPassword, 10);
+
+    await db.collection('users').doc(userId).update({
+      passwordHash: hashedPassword,
+    });
+
+    if (session) {
+      await signOut({ redirectTo: '/sign-in' });
+    }
+    return { success: true };
+  } catch (error) {
+    if (isRedirectError(error as Error & { digest?: string })) {
+      console.error('Redirect error:', error);
+      // redirects to the app in case of success
+      throw error;
+    }
+
+    if (error instanceof Error) {
+      return {
+        success: false,
+        errors: {
+          _form: [error.message],
+        },
+      };
+    } else {
+      return {
+        success: false,
+        errors: {
+          _form: ['An unexpected error occurred. Please try again.'],
+        },
+      };
+    }
   }
 }
 
@@ -280,7 +376,7 @@ export const deleteAccount = async (userId: string) => {
 
     return { success: true };
   } catch (error) {
-    console.error('Error deleting account:', error);
+    //console.error('Error deleting account:', error);
     return {
       success: false,
       error:
@@ -289,79 +385,6 @@ export const deleteAccount = async (userId: string) => {
   }
 };
 
-////// UPDATE PASSWORD //////
-export async function updatePassword(
-  formState: AuthResponse | undefined,
-  formData: FormData,
-): Promise<AuthResponse> {
-  const data = {
-    newPassword: formData.get('newPassword')?.toString() || '',
-    repeatPassword: formData.get('repeatPassword')?.toString() || '',
-  };
-
-  const result = updatePasswordSchema.safeParse(data);
-
-  const session = await nextAuth();
-
-  if (!session?.user?.id) {
-    throw new Error('Unauthorized');
-  }
-
-  if (!result.success) {
-    console.log('Validation failed:', result.error.flatten().fieldErrors); // Debugging
-    return { success: false, errors: result.error.flatten().fieldErrors };
-  }
-
-  const { newPassword, repeatPassword } = data;
-
-  if (newPassword !== repeatPassword) {
-    console.log('Passwords do not match'); // Debugging
-    return {
-      success: false,
-      errors: { _form: ['Passwords do not match'] },
-    };
-  }
-
-  try {
-    const userId = session.user.id;
-
-    const hashedPassword = await bcrypt.hash(result.data.newPassword, 10);
-
-    await db.collection('users').doc(userId).update({
-      passwordHash: hashedPassword,
-    });
-    console.log('Password updated successfully'); // Debugging
-    // await signOut();
-    // redirect('/sign-in'); // 🔥 Redirect only after successful password update
-    if (session) {
-      await signOut({ redirectTo: '/sign-in' });
-    }
-    return { success: true };
-  } catch (error) {
-    if (isRedirectError(error as Error & { digest?: string })) {
-      console.error('Redirect error:', error);
-      // redirects to the app in case of success
-      throw error;
-    }
-    console.error('Error updating password:', error); // Debugging
-    if (error instanceof Error) {
-      return {
-        success: false,
-        errors: {
-          _form: [error.message],
-        },
-      };
-    } else {
-      return {
-        success: false,
-        errors: {
-          _form: ['An unexpected error occurred. Please try again.'],
-        },
-      };
-    }
-  }
-}
-
 export async function setThemeCookies(theme: string) {
   cookies().set('theme', theme, { path: '/', maxAge: 7 * 24 * 60 * 60 });
 }
@@ -369,17 +392,3 @@ export async function setThemeCookies(theme: string) {
 export async function signOutAction() {
   await signOut({ redirectTo: '/' });
 }
-
-// async function testStorageConnection() {
-//   const { data, error } = await supabase.storage
-//     .from('avatars') // Specify your bucket name
-//     .list(); // List all objects in the bucket
-
-//   if (error) {
-//     console.error('Error accessing bucket:', error);
-//   } else {
-//     console.log('Files in bucket:', data);
-//   }
-// }
-
-// testStorageConnection();

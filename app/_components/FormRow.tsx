@@ -16,7 +16,12 @@ function FormRow({ label, children, className, error }: FormRow) {
         </label>
       )}
       {children}
-      {error && <span className="text-sm text-red-700">{error}</span>}
+      {error && (
+        <span className="text-sm text-red-700">
+          {' '}
+          {Array.isArray(error) ? error.join(' ') : error}
+        </span>
+      )}
     </div>
   );
 }
